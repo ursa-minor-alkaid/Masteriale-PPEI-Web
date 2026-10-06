@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- 字符编码：UTF-8，保证英文撇号、µ、°、✓ 等特殊字符正常显示 -->
+  <meta charset="UTF-8">
+  <!-- 视口设置：宽度跟随设备、初始缩放 100%，移动端适配必备 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <!-- 浏览器标签页标题 -->
+  <title>A-BITE — Testing, turned into surveillance</title>
+  <!-- SEO / 社交分享用的页面摘要描述 -->
+  <meta name="description" content="A-BITE is a connected diagnostics concept: painless microneedle sampling, a single-use RT-LAMP cartridge, and a reusable reader that turns every test into an epidemiological signal.">
+
+  <!-- 网站图标（favicon），SVG 矢量格式 -->
+  <link rel="icon" type="image/svg+xml" href="../Assets/icons/favicon.svg">
+
+  <!-- Geist Sans + Geist Mono（Vercel 出品的字体家族）
+       preconnect 提前与 Google Fonts 的域名建立连接，加快字体加载 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 样式表加载顺序：设计令牌 → 基础重置 → 组件 → 页面
+       层层覆盖，后面的文件可引用前面定义的 CSS 变量 -->
+  <link rel="stylesheet" href="../Styles/base/variables.css">   <!-- 全站 CSS 变量（颜色/字体/圆角/阴影等） -->
+  <link rel="stylesheet" href="../Styles/base/reset.css">       <!-- 浏览器默认样式重置 + 全局排版 + .reveal 浮现动画 -->
+  <link rel="stylesheet" href="../Styles/components/buttons.css"><!-- 按钮与带箭头文字链接 -->
+  <link rel="stylesheet" href="../Styles/components/navbar.css">  <!-- 固定顶栏导航 -->
+  <link rel="stylesheet" href="../Styles/components/navbar-dropdown.css">  <!-- 顶栏下拉子菜单（附加样式） -->
+  <link rel="stylesheet" href="../Styles/components/background.css">  <!-- 全站共享：毛玻璃渐变光斑背景 -->
+  <link rel="stylesheet" href="../Styles/components/cards.css">   <!-- 玻璃卡片与四层网格单元 -->
+  <link rel="stylesheet" href="../Styles/components/footer.css">  <!-- 页脚 -->
+  <link rel="stylesheet" href="../Styles/components/back-to-top.css">  <!-- 返回顶部悬浮按钮（全站共享，components.js 注入） -->
+  <link rel="stylesheet" href="../Styles/pages/home.css">         <!-- 首页专属：Hero/产品展示图/CTA 带/响应式 -->
+  <link rel="stylesheet" href="../Styles/pages/home-pager.css">   <!-- 首页整页翻页：满视口分页容器与过渡动画（仅新增 .fp-* 规则，不覆盖既有样式） -->
+</head>
+<body>
+
+  <!-- 毛玻璃背景与顶部导航栏由 components.js 统一注入（全站一份源码，
+       改 js/components.js 即可全站生效），不再内联编写 -->
+
+  <main class="site-main">
+
+    <!-- ===== Hero 首屏 =====
+         居中排版：徽章 → 大标题 → 按钮组 → 产品主视觉
+         （项目属性行已移至下方"项目属性 + 文献依据条"）
+         所有 .reveal 元素带 --reveal-delay 内联变量，实现自上而下的错落浮现 -->
+    <section class="hero">
+      <div class="container">
+        <!-- 顶部徽章：NEW 标签 + 项目阶段说明，点击跳到更新日志 -->
+        <a class="hero-badge reveal" href="#updates">
+          <span class="tag">NEW</span>
+          Concept stage — engineering notes now available
+        </a>
+        <!-- 主标题（.08s 延迟浮现）；.accent 词使用青绿渐变文字 -->
+        <h1 class="reveal" style="--reveal-delay:.08s">
+          A mosquito bite. A rapid <span class="accent">test</span>.<br>
+          A connected <span class="accent">network</span>.
+        </h1>
+        <!-- 行动按钮组（.24s 延迟）：主按钮跳平台区，次按钮跳硬件区 -->
+        <div class="hero-cta reveal" style="--reveal-delay:.24s">
+          <a class="btn btn-primary btn-lg" href="#platform">Explore the system</a>
+          <a class="btn btn-secondary btn-lg" href="#hardware">
+            See the hardware
+            <!-- 右上箭头图标（内联 SVG，stroke 用 currentColor 跟随文字色） -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+
+        <!-- 产品主视觉：机器全家福单独居中（.32s 延迟），保持原有尺寸规则；
+             两个纪念徽章悬浮在视觉区左侧、标题左下方，可拖拽摆放 -->
+        <div class="hero-visual reveal" style="--reveal-delay:.32s">
+          <figure class="hero-media">
+            <img src="../Assets/images/Machine%20Concept-Photoroom.png"
+                 srcset="../Assets/opt/machine-480.webp 480w,
+                         ../Assets/opt/machine-720.webp 720w,
+                         ../Assets/opt/machine-1024.webp 1024w,
+                         ../Assets/opt/machine-1280.webp 1280w"
+                 sizes="(max-width: 560px) min(280px, 72vw), min(55vh, 30vw, 720px)"
+                 alt="The A-BITE hardware set: the reusable reader, the microneedle sampling pen on its dock, and a tray of single-use cartridges"
+                 fetchpriority="high" decoding="async">
+          </figure>
+          <!-- 徽章 1：A-BITE 正式 logo（缩小为圆形贴章）；徽章 2：卡通蚊子 cute 版。
+               外框为波浪花边（齿轮形）印章样式，绿色描边与浅色毛玻璃背景区分。
+               data-hero-stamp 供 main.js 绑定拖拽；累计位移写在自身的 --dx/--dy 变量上 -->
+          <div class="hero-stamp hero-stamp-1" data-hero-stamp aria-label="A-BITE logo badge (draggable)">
+            <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <path d="M50.0 6.0 L51.8 3.7 L53.8 2.3 L55.6 2.5 L57.3 4.2 L58.6 6.8 L59.7 9.5 L60.9 11.3 L62.4 11.8 L64.4 10.9 L66.8 9.3 L69.4 7.9 L71.7 7.4 L73.4 8.3 L74.2 10.5 L74.4 13.4 L74.5 16.3 L74.9 18.4 L76.1 19.4 L78.3 19.4 L81.1 18.9 L84.0 18.5 L86.4 19.0 L87.5 20.4 L87.5 22.8 L86.6 25.6 L85.5 28.2 L85.1 30.4 L85.8 31.8 L87.8 32.6 L90.7 33.2 L93.5 34.0 L95.5 35.2 L96.0 37.0 L95.1 39.2 L93.2 41.4 L91.1 43.5 L89.9 45.3 L90.1 46.8 L91.6 48.4 L94.0 50.0 L96.3 51.8 L97.7 53.8 L97.5 55.6 L95.8 57.3 L93.2 58.6 L90.5 59.7 L88.7 60.9 L88.2 62.4 L89.1 64.4 L90.7 66.8 L92.1 69.4 L92.6 71.7 L91.7 73.4 L89.5 74.2 L86.6 74.4 L83.7 74.5 L81.6 74.9 L80.6 76.1 L80.6 78.3 L81.1 81.1 L81.5 84.0 L81.0 86.4 L79.6 87.5 L77.2 87.5 L74.4 86.6 L71.8 85.5 L69.6 85.1 L68.2 85.8 L67.4 87.8 L66.8 90.7 L66.0 93.5 L64.8 95.5 L63.0 96.0 L60.8 95.1 L58.6 93.2 L56.5 91.1 L54.7 89.9 L53.2 90.1 L51.6 91.6 L50.0 94.0 L48.2 96.3 L46.2 97.7 L44.4 97.5 L42.7 95.8 L41.4 93.2 L40.3 90.5 L39.1 88.7 L37.6 88.2 L35.6 89.1 L33.2 90.7 L30.6 92.1 L28.3 92.6 L26.6 91.7 L25.8 89.5 L25.6 86.6 L25.5 83.7 L25.1 81.6 L23.9 80.6 L21.7 80.6 L18.9 81.1 L16.0 81.5 L13.6 81.0 L12.5 79.6 L12.5 77.2 L13.4 74.4 L14.5 71.8 L14.9 69.6 L14.2 68.2 L12.2 67.4 L9.3 66.8 L6.5 66.0 L4.5 64.8 L4.0 63.0 L4.9 60.8 L6.8 58.6 L8.9 56.5 L10.1 54.7 L9.9 53.2 L8.4 51.6 L6.0 50.0 L3.7 48.2 L2.3 46.2 L2.5 44.4 L4.2 42.7 L6.8 41.4 L9.5 40.3 L11.3 39.1 L11.8 37.6 L10.9 35.6 L9.3 33.2 L7.9 30.6 L7.4 28.3 L8.3 26.6 L10.5 25.8 L13.4 25.6 L16.3 25.5 L18.4 25.1 L19.4 23.9 L19.4 21.7 L18.9 18.9 L18.5 16.0 L19.0 13.6 L20.4 12.5 L22.8 12.5 L25.6 13.4 L28.2 14.5 L30.4 14.9 L31.8 14.2 L32.6 12.2 L33.2 9.3 L34.0 6.5 L35.2 4.5 L37.0 4.0 L39.2 4.9 L41.4 6.8 L43.5 8.9 L45.3 10.1 L46.8 9.9 L48.4 8.4 Z"/>
+            </svg>
+            <img src="../Assets/icons/ICON%20(1).png"
+                 srcset="../Assets/opt/stamp-logo-256.webp 2x, ../Assets/opt/stamp-logo-256.webp 3x"
+                 alt="" draggable="false" loading="lazy" decoding="async">
+          </div>
+          <div class="hero-stamp hero-stamp-2" data-hero-stamp aria-label="A-BITE cute mosquito badge (draggable)">
+            <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <path d="M50.0 6.0 L51.8 3.7 L53.8 2.3 L55.6 2.5 L57.3 4.2 L58.6 6.8 L59.7 9.5 L60.9 11.3 L62.4 11.8 L64.4 10.9 L66.8 9.3 L69.4 7.9 L71.7 7.4 L73.4 8.3 L74.2 10.5 L74.4 13.4 L74.5 16.3 L74.9 18.4 L76.1 19.4 L78.3 19.4 L81.1 18.9 L84.0 18.5 L86.4 19.0 L87.5 20.4 L87.5 22.8 L86.6 25.6 L85.5 28.2 L85.1 30.4 L85.8 31.8 L87.8 32.6 L90.7 33.2 L93.5 34.0 L95.5 35.2 L96.0 37.0 L95.1 39.2 L93.2 41.4 L91.1 43.5 L89.9 45.3 L90.1 46.8 L91.6 48.4 L94.0 50.0 L96.3 51.8 L97.7 53.8 L97.5 55.6 L95.8 57.3 L93.2 58.6 L90.5 59.7 L88.7 60.9 L88.2 62.4 L89.1 64.4 L90.7 66.8 L92.1 69.4 L92.6 71.7 L91.7 73.4 L89.5 74.2 L86.6 74.4 L83.7 74.5 L81.6 74.9 L80.6 76.1 L80.6 78.3 L81.1 81.1 L81.5 84.0 L81.0 86.4 L79.6 87.5 L77.2 87.5 L74.4 86.6 L71.8 85.5 L69.6 85.1 L68.2 85.8 L67.4 87.8 L66.8 90.7 L66.0 93.5 L64.8 95.5 L63.0 96.0 L60.8 95.1 L58.6 93.2 L56.5 91.1 L54.7 89.9 L53.2 90.1 L51.6 91.6 L50.0 94.0 L48.2 96.3 L46.2 97.7 L44.4 97.5 L42.7 95.8 L41.4 93.2 L40.3 90.5 L39.1 88.7 L37.6 88.2 L35.6 89.1 L33.2 90.7 L30.6 92.1 L28.3 92.6 L26.6 91.7 L25.8 89.5 L25.6 86.6 L25.5 83.7 L25.1 81.6 L23.9 80.6 L21.7 80.6 L18.9 81.1 L16.0 81.5 L13.6 81.0 L12.5 79.6 L12.5 77.2 L13.4 74.4 L14.5 71.8 L14.9 69.6 L14.2 68.2 L12.2 67.4 L9.3 66.8 L6.5 66.0 L4.5 64.8 L4.0 63.0 L4.9 60.8 L6.8 58.6 L8.9 56.5 L10.1 54.7 L9.9 53.2 L8.4 51.6 L6.0 50.0 L3.7 48.2 L2.3 46.2 L2.5 44.4 L4.2 42.7 L6.8 41.4 L9.5 40.3 L11.3 39.1 L11.8 37.6 L10.9 35.6 L9.3 33.2 L7.9 30.6 L7.4 28.3 L8.3 26.6 L10.5 25.8 L13.4 25.6 L16.3 25.5 L18.4 25.1 L19.4 23.9 L19.4 21.7 L18.9 18.9 L18.5 16.0 L19.0 13.6 L20.4 12.5 L22.8 12.5 L25.6 13.4 L28.2 14.5 L30.4 14.9 L31.8 14.2 L32.6 12.2 L33.2 9.3 L34.0 6.5 L35.2 4.5 L37.0 4.0 L39.2 4.9 L41.4 6.8 L43.5 8.9 L45.3 10.1 L46.8 9.9 L48.4 8.4 Z"/>
+            </svg>
+            <img src="../Assets/icons/ICON-cute.png"
+                 srcset="../Assets/opt/stamp-cute-256.webp 2x, ../Assets/opt/stamp-cute-256.webp 3x"
+                 alt="" draggable="false" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 项目属性 + 文献依据条 =====
+         Hero 下方两行小字：项目属性行（原 Hero 副标题，现下移至此）
+         + 文献依据说明；原同行评审文献列表已移除，只保留说明标签，
+         两行间距见 home.css 的 .precedents 区块 -->
+    <section class="precedents reveal">
+      <div class="container">
+        <!-- 项目属性行：沿用 .hero-sub 的字号与颜色（移出 Hero 后其外边距由
+             home.css 的 .precedents .hero-sub 覆盖） -->
+        <p class="hero-sub">Student research project · M1 Sino-French Program 2026–2027 · Design concept</p>
+        <!-- 文献依据说明标签：等宽大写小字 -->
+        <p class="precedents-label">Built on peer-reviewed precedents</p>
+      </div>
+    </section>
+
+    <!-- ===== 平台：四层架构 =====
+         id="platform" 供导航锚点跳转
+         区块头部（.section-head）+ 2x2 网格（.layer-grid）+ 数据统计行（.stats-row） -->
+    <section class="section" id="platform">
+      <div class="container">
+        <!-- 区块头部：小标签（.micro-label）+ 大标题 + 一句话说明 -->
+        <div class="section-head reveal">
+          <span class="micro-label">The platform</span>
+          <h2>Four layers, one loop.</h2>
+          <p>Specificity lives in chemistry, never in hardware. Swap the recipe — the reader stays exactly the same.</p>
+        </div>
+        <!-- 四层网格：每格 = 序号（.num）+ 标题 + 说明
+             分隔线由 home.css 的 .layer-grid 规则绘制，窄屏变单列 -->
+        <div class="layer-grid reveal">
+          <div class="layer-cell">
+            <span class="num">01</span>
+            <h3>Recipe</h3>
+            <p>Versioned primer panels, released like software. A new pathogen means a new recipe — never new hardware.</p>
+          </div>
+          <div class="layer-cell">
+            <span class="num">02</span>
+            <h3>Cartridge</h3>
+            <p>Single-use, fully closed, extraction-free. Lyophilized RT-LAMP chemistry inside — the sample itself rehydrates it.</p>
+          </div>
+          <div class="layer-cell">
+            <span class="num">03</span>
+            <h3>Reader</h3>
+            <p>The only reusable part, with zero pathogen-specific components: one heater, one optical path, updatable software.</p>
+          </div>
+          <div class="layer-cell">
+            <span class="num">04</span>
+            <h3>Surveillance</h3>
+            <p>Anonymized and aggregated at upload. Every run quietly becomes an epidemiological data point.</p>
+          </div>
+        </div>
+
+        <!-- 数据统计行：四列关键指标，上下发丝线夹住；窄屏变 2x2 / 单列
+             <sup> 是单位上标（µL/min/°C），样式见 home.css 的 .stat-cell b sup -->
+        <div class="stats-row reveal" style="margin-top: 64px">
+          <div class="stat-cell"><b>10–20<sup>µL</sup></b><span>Interstitial fluid, no blood draw</span></div>
+          <div class="stat-cell"><b>≤ 40<sup>min</sup></b><span>Sample to screened result</span></div>
+          <div class="stat-cell"><b>65<sup>°C</sup></b><span>One constant temperature</span></div>
+          <div class="stat-cell"><b>3</b><span>Channels — DENV · CHIKV · control</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 硬件：左右分栏展示区 =====
+         .split 网格：左列文案（.split-copy），右列产品图（.split-media）
+         窄屏（≤860px）时变为上下堆叠；规格卡（.spec-card）通栏跟在分栏下方 -->
+    <section class="section" id="hardware">
+      <div class="container">
+        <div class="split">
+          <!-- 左列：标题文案 + 指向更新日志的箭头链接
+               文案依据 references：机器只做物理通用工作（加热/看光/上传），
+               特异性全部锁在一次性卡盒里；微针取样笔采 10–20 µL 组织间液 -->
+          <div class="split-copy reveal">
+            <span class="micro-label">The hardware</span>
+            <h2>The reader is generic. The cartridge is the app.</h2>
+            <p>
+              The reader handles the physics — heating, fluorescence, upload —
+              and knows nothing about pathogens. All specificity is freeze-dried
+              into a closed, credit-card-sized cartridge, while a microneedle
+              sampling pen collects interstitial fluid at the bite site.
+              No blood draw, no extraction.
+            </p>
+            <a class="link-arrow" href="#updates">
+              Read the engineering notes
+              <!-- 右箭头图标：悬停时右移（样式见 buttons.css 的 .link-arrow:hover） -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <!-- 右列：系统全家福（读数仪 + 取样笔 + 卡盒托盘，.12s 延迟浮现）
+               透明背景 PNG，drop-shadow 浮起（样式见 home.css .split-media） -->
+          <figure class="split-media reveal" style="--reveal-delay:.12s">
+            <img src="../Assets/images/Machine%20Concept-Photoroom.png"
+                 srcset="../Assets/opt/machine-480.webp 480w,
+                         ../Assets/opt/machine-720.webp 720w,
+                         ../Assets/opt/machine-1024.webp 1024w,
+                         ../Assets/opt/machine-1280.webp 1280w"
+                 sizes="(max-width: 860px) min(520px, 92vw), 45vw"
+                 alt="The A-BITE hardware set: the reusable reader running the surveillance dashboard, the microneedle sampling pen on its dock, and a tray of single-use cartridges"
+                 loading="lazy" decoding="async">
+          </figure>
+        </div>
+        <!-- 规格表卡片（通栏，.2s 延迟浮现）：标题栏 + 多行"键（.k）/ 值（.v）"，行间用发丝线分隔 -->
+        <div class="spec-card spec-card-full reveal" style="--reveal-delay:.2s">
+          <header>cartridge — at a glance</header>
+          <div class="spec-row"><span class="k">sample</span><span class="v">10–20 µL ISF, extraction-free</span></div>
+          <div class="spec-row"><span class="k">chemistry</span><span class="v">RT-LAMP, lyophilized in-cartridge</span></div>
+          <div class="spec-row"><span class="k">targets</span><span class="v">DENV 3′UTR · NS5 / CHIKV nsP1 · E1</span></div>
+          <div class="spec-row"><span class="k">control</span><span class="v">Human RNase P internal control</span></div>
+          <div class="spec-row"><span class="k">confirmation</span><span class="v">One-pot CRISPR Cas12b, 42 → 52 °C</span></div>
+          <div class="spec-row"><span class="k">identity</span><span class="v">QR / RFID recipe ID on every unit</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 更新日志（changelog）=====
+         列表式时间线：每条 = <time> 日期 + <p> 内容（关键词用 <b> 加粗）
+         样式见 home.css 的 .changelog；窄屏时日期与内容上下排列 -->
+    <section class="section" id="updates">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="micro-label">Updates</span>
+          <h2>Progress, in order.</h2>
+        </div>
+        <ul class="changelog reveal">
+          <li>
+            <!-- datetime 属性是机器可读日期，显示文本给人看 -->
+            <time datetime="2026-08">2026.08</time>
+            <p><b>Recipe v0.3</b> — dual-target DENV panel (3′UTR + NS5) covering serotypes 1–4.</p>
+          </li>
+          <li>
+            <time datetime="2026-07">2026.07</time>
+            <p><b>Reader specification</b> — two programmable isothermal steps added for CRISPR confirmation.</p>
+          </li>
+          <li>
+            <time datetime="2026-06">2026.06</time>
+            <p><b>Architecture freeze</b> — four-layer test-to-surveillance design locked for WP2.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== CTA 转化带 =====
+         通栏深色区块（背景网格线 + 渐变见 home.css 的 .cta-section）
+         id="cta" 供导航"Get in touch"按钮锚点跳转
+         标题字间距已在 home.css 的 .cta-section h2 中调宽（-0.04em → -0.02em） -->
+    <section class="cta-section" id="cta">
+      <h2 class="reveal">You got A-BITE, we got you.</h2>
+      <p class="reveal" style="--reveal-delay:.08s">
+        A-BITE is an early-stage concept. We welcome collaborators across
+        microfluidics, molecular chemistry, and public health.
+      </p>
+      <!-- 深色底上的按钮变体：btn-light（白底）/ btn-outline-light（描边），见 buttons.css -->
+      <div class="hero-cta reveal" style="--reveal-delay:.16s">
+        <a class="btn btn-light btn-lg" href="mailto:hello@example.org">Get in touch</a>
+        <a class="btn btn-outline-light btn-lg" href="#updates">Read the notes</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚由 components.js 统一注入（全站一份源码，含合作院校徽标），不再内联编写 -->
+
+  <!-- 共享组件注入器：生成毛玻璃背景 + 导航栏 + 页脚（必须先于 main.js 执行） -->
+  <script src="../js/components.js" defer></script>
+  <!-- 交互脚本：滚动状态/移动菜单/浮现动画/视差/年份，defer 表示 HTML 解析完再执行 -->
+  <script src="../js/main.js" defer></script>
+  <!-- 整页翻页器：运行时将首页区块组装为 5 个满视口页，接管滚轮/键盘/触摸翻页
+       （须在 components.js 之后执行：页脚由它注入并归入第 5 页） -->
+  <script src="../js/pager.js" defer></script>
+</body>
+</html>

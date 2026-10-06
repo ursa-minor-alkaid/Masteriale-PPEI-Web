@@ -1,0 +1,119 @@
+/* ============================================================
+   首页整页翻页（仅 index.html 加载，配合 js/pager.js）
+   约束说明：本文件只定义新增的 .fp-* 翻页容器规则，
+   不修改、不覆盖任何既有内容与组件的样式规则。
+   ============================================================ */
+
+/* 翻页视口（新增元素）：固定铺满视口，裁切页外内容，
+   原生滚动/滑动手势交由 pager.js 接管以实现整页翻页 */
+.fp-viewport {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh;    /* 旧浏览器回退 */
+  height: 100dvh;   /* 移动端动态视口高度（地址栏收放时自适应） */
+  overflow: hidden;
+  /* 渐进增强：clip 使容器完全不可滚动（hidden 仍可被锚点导航/scrollIntoView
+     程序化滚动，会与 transform 平移叠加造成错位）；不支持的浏览器回退 hidden，
+     由 pager.js 的 scroll 归零监听兜底 */
+  overflow: clip;
+  overscroll-behavior: none;  /* 阻断滚动链/橡皮筋回弹 */
+  touch-action: none;         /* 触摸滑动完全由 JS 解释为翻页 */
+}
+
+/* 翻页轨道：挂在原有 .site-main 元素上（该选择器此前无任何样式规则，
+   此处仅追加整体平移与过渡动画，不影响其内部既有布局）。
+   动画时长由 pager.js 按位移距离写入 --fp-duration（500–820ms 区间）：
+   整屏位移用较长时长，短位移（如露出页脚）用较短时长，避免"卡住"感 */
+.fp-track {
+  height: 100%;
+  transition: transform var(--fp-duration, 0.72s) var(--ease-out);
+  will-change: transform;
+}
+/* 初始化 / 视口尺寸变化时的瞬时对齐（不播放动画，保证定位锁定） */
+.fp-track.is-instant { transition: none; }
+/* 拖拽跟手阶段（pager.js 标记）：关闭过渡，页面位移完全跟随输入；
+   达到吸附阈值后移除该类，播放过渡动画滑向目标页 */
+.fp-track.is-dragging { transition: none; }
+
+/* 单页容器（新增元素）：每页恰好一个视口高，
+   内容垂直水平居中，页外内容裁切，不出现内部滚动条 */
+.fp-page {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overflow: clip;  /* 同上：防止原生锚点滚动与 transform 平移叠加错位 */
+}
+
+/* 页内容包裹层（新增元素）：盛装原有区块，自身不引入任何视觉样式；
+   当内容自然高度超过视口时，由 pager.js 对其做整体等比缩放，
+   确保任何屏幕尺寸下每页内容完整显示、无截断 */
+.fp-page-inner {
+  width: 100%;
+  display: flow-root;         /* 容纳子元素外边距，高度测量准确 */
+  transform-origin: center center;
+}
+
+/* CTA + 页脚合并的"加高页"（类与内联高度由 pager.js 设置：
+   页高 = 视口高 + 页脚自然高，CTA 与页脚两部分尺寸均不变、仅页面变长）：
+   整页只有一个停靠点（页顶对齐 CTA 舞台），页内可自由滚动逐步露出页脚，
+   滚回页顶后再向上才翻回上一页（滚动仍由轨道 transform 平移实现，
+   页容器本身不产生滚动条）。
+   上半屏为 CTA 舞台（绿色带保持自然高度、垂直居中，"扁"而不铺满），
+   下半部分为页脚。
+   此处只调整高度与纵向排布，不改动 .cta-section 的既有视觉样式 */
+.fp-page-inner.is-tall {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+/* CTA 舞台：恰好占一个视口高（flex:1 吃掉页脚以外的剩余高度） */
+.fp-cta-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;  /* 极矮视口下由 pager.js 整体等比缩放 */
+}
+.fp-cta-stage > .cta-section {
+  width: 100%;
+  margin-top: 0;  /* 原 120px 是为连续滚动拉开区块间距；整页模式下会留白带，仅在翻页容器内归零 */
+}
+
+/* 右侧点状页码指示器（pager.js 生成，每停靠点一个圆点）：
+   固定在视口右侧垂直居中，悬浮于所有内容之上；
+   圆点本身用语义色，避免引入新的视觉元素 */
+.fp-dots {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 101;                 /* 高于内容（导航 100 之上），始终可见 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;         /* 空白区域不拦截点击，仅圆点本身可点 */
+}
+.fp-dots .fp-dot {
+  pointer-events: auto;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(31, 53, 49, 0.28);  /* --ink-900 的半透明形式 */
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.fp-dots .fp-dot:hover { background: rgba(31, 53, 49, 0.55); }
+/* 当前页：品牌青绿 + 轻微放大 */
+.fp-dots .fp-dot.is-active {
+  background: var(--teal-800);
+  transform: scale(1.35);
+}

@@ -1,0 +1,462 @@
+/* ============================================================
+   A-BITE 内容页样式（正文向，非展示向）
+   适用于所有正文向内容子页面（the-problem / the-science 等）。
+   仅依赖：variables.css / reset.css / buttons.css（全局组件）。
+   与 home.css 完全解耦 —— 本文件不加载 home.css。
+   规则遵循 index-design-system.md：
+   - 颜色一律 var() 语义令牌；标题 600 / 负字距 / 行高 1.1
+   - 等宽字体只用于元信息；hover 位移 ≤4px；颜色过渡 0.2s ease
+   - 断点只做结构变换（860 / 560），字号优先 clamp 流式
+   ============================================================ */
+
+/* 锚点跳转补偿：避开 76px 固定顶栏（与首页一致的 84px 约定） */
+section { scroll-margin-top: 84px; }
+
+
+/* ---- 1. 页头 .page-head ----
+   承载 micro-label 面包屑、h1 标题、.lede 引言、.meta 元信息行。
+   容器收窄至 720px：内容页行长短于首页，利于长文阅读。 */
+.page-head {
+  max-width: 720px;
+  padding-top: calc(var(--nav-height) + 64px);
+}
+
+/* 面包屑：复用全局 .micro-label（teal-700 12px 大写）；
+   当前页名称用弱化色区分层级 */
+.page-head .micro-label .crumb-here { color: var(--ink-300); }
+
+.page-head h1 {
+  margin-top: 20px;
+  font-size: clamp(34px, 4.6vw, 52px);
+  letter-spacing: -0.04em;
+}
+
+/* 引言：介于标题与正文之间的"摘要段"，
+   比正文大、比正文弱 —— 层级参考 .hero-sub */
+.page-head .lede {
+  margin-top: 20px;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+/* 元信息行：mono 小字 + 圆点分隔，居中点用弱化色 */
+.page-head .meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-300);
+}
+.page-head .meta .dot::before { content: "·"; }
+
+/* 页头底部发丝线：与正文分隔 */
+.page-head .head-rule {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 40px 0 0;
+}
+
+
+/* ---- 2. 目录 .toc ----
+   编号列表 + 锚点跳转；窄双列，移动端折为单列 */
+.toc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  max-width: 720px;
+  padding: 32px 0 0;
+}
+
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 11px 0;
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+  transition: color 0.2s ease;
+}
+.toc a:hover { color: var(--ink-900); }
+.toc a:hover .toc-num { color: var(--teal-700); }
+
+/* 编号：mono teal-700，与全站 .num 约定一致 */
+.toc .toc-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--ink-300);
+  transition: color 0.2s ease;
+}
+
+
+/* ---- 3. 正文章节 .content-section + .prose ----
+   节奏：区块顶部留白 88px（内容页比首页 120px 更紧凑，内容密度优先） */
+.content-section { padding-top: 88px; }
+
+.prose { max-width: 720px; }
+
+/* 章节标题：h2 + 编号前缀（编号由 <span class="num"> 提供） */
+.prose h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-size: clamp(26px, 3.2vw, 36px);
+  letter-spacing: -0.035em;
+}
+.prose h2 .num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--teal-700);
+}
+
+/* 小节标题 h3 */
+.prose h3 {
+  margin-top: 40px;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.prose h2 + h3 { margin-top: 28px; }
+
+/* 段落：15.5px / 1.75 —— 行高略高于首页展示文本（1.6），长文易读；
+   两端对齐（justify）+ 自动断词：页面 lang="en"，hyphens 可避免两端对齐产生过大词隙 */
+.prose p {
+  margin-top: 20px;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  text-align: justify;
+  hyphens: auto;
+}
+.prose h2 + p,
+.prose h3 + p { margin-top: 16px; }
+
+/* 章节副标题 .sec-sub：位于 h2 之下、正文之上，
+   内容取当页导航下拉菜单中对应本章节的条目文案。
+   字体刻意区别于主标题：衬线（Georgia）斜体 vs Geist 无衬线正体，
+   形成“编辑感”的字体对比；颜色用品牌青绿 teal-700（同 .num 编号），
+   字号介于 h2（clamp 26–36）与正文（15.5）之间。 */
+.prose .sec-sub {
+  margin: 12px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(17px, 1.9vw, 20px);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--teal-700);
+  text-align: left;  /* 覆盖 .prose p 的两端对齐：副标题为短单行，保持自然左对齐 */
+  hyphens: none;
+}
+/* 副标题插入后，原有的 h2 + p / h2 + h3 相邻间距改由副标题承接 */
+.prose .sec-sub + p { margin-top: 18px; }
+.prose .sec-sub + h3 { margin-top: 24px; }
+
+/* 行内强调：近黑 + 500 */
+.prose strong { font-weight: 500; color: var(--color-text); }
+
+/* 文献引用行：mono 小字弱化，用于章节证据出处与待补标记 */
+.prose .ref-cite {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-300);
+}
+
+/* 列表：方块小标记（teal），不用默认圆点 */
+.prose ul {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+.prose li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  text-align: justify;
+  hyphens: auto;
+}
+.prose li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.72em;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--teal-600);
+  opacity: 0.55;
+}
+
+
+/* ---- 4. 配图 .figure ----
+   玻璃卡片容器承载图片；figcaption 为 mono 弱化说明 */
+.figure { margin-top: 40px; }
+
+.figure .figure-frame {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  padding: 20px;
+  overflow: hidden;
+}
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+.figure figcaption {
+  margin-top: 12px;
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-300);
+}
+
+
+/* ---- 5. 引用块 .pull-quote ----
+   左侧 2px teal 竖条 + 大字强调；出处用 mono 弱化 */
+.pull-quote {
+  margin-top: 40px;
+  padding: 4px 0 4px 24px;
+  border-left: 2px solid var(--teal-600);
+}
+.pull-quote p {
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+.pull-quote cite {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--ink-300);
+}
+
+
+/* ---- 6. 要点网格 .key-grid ----
+   复用首页 .layer-grid 的分隔线模式：外框玻璃 + :nth-child 画内线，
+   格子自身无边框（强制保持此模式） */
+.key-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 40px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+.key-grid .key-cell:nth-child(odd) { border-right: 1px solid var(--hairline); }
+.key-grid .key-cell:nth-child(-n+2) { border-bottom: 1px solid var(--hairline); }
+
+.key-cell { padding: 26px 24px; }
+.key-cell h4 {
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.key-cell p {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+
+/* ---- 7. 键值数据表 .data-rows ----
+   仿首页 spec-card 规格行：mono 键名（弱化）+ 右对齐值，行间发丝线 */
+.data-rows {
+  margin-top: 40px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+.data-rows header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 13px 20px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.data-row + .data-row { border-top: 1px solid var(--hairline); }
+.data-row .k {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-300);
+}
+.data-row .v { color: var(--color-text-secondary); text-align: right; }
+.data-row .v b { font-weight: 600; color: var(--color-text); }
+
+
+/* ---- 8. 页面收尾 .page-end ----
+   浅色玻璃卡收尾（替代深色 CTA 带）：
+   玻璃底 + 发丝线 + 顶部薄荷光晕（深色 CTA 光晕的浅色版本），
+   上下 120px 呼吸与首页区块节奏一致，同时衔接页脚。 */
+.page-end { margin: 120px 0; }
+
+.end-card {
+  position: relative;
+  max-width: 720px;
+  margin-inline: auto;
+  padding: clamp(48px, 7vw, 72px) clamp(24px, 5vw, 64px);
+  /* 边界强化（不用阴影）：
+     1) 描边由玻璃描边升级为加强发丝线 --hairline-strong
+     2) 外侧再叠一圈 1px outline，形成双线边缘，与背景光斑拉开层次 */
+  border: 1px solid var(--hairline-strong);
+  outline: 1px solid var(--hairline);
+  outline-offset: 4px;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  text-align: center;
+  overflow: hidden;
+}
+
+/* 顶部薄荷光晕：用 rgba 形式的 mint-400，面积克制 */
+.end-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 60% at 50% 0%, rgba(151, 227, 209, 0.22), transparent 70%);
+  pointer-events: none;
+}
+/* 顶部 2px 薄荷渐变高光条：沿用导航下拉的装饰手法，进一步勾出上边缘 */
+.end-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--mint-400) 30%, var(--mint-400) 70%, transparent);
+  pointer-events: none;
+}
+.end-card > * { position: relative; }
+
+.end-card h2 {
+  margin-top: 16px;
+  font-size: clamp(28px, 3.6vw, 40px);
+  letter-spacing: -0.035em;
+}
+.end-card .end-lede {
+  max-width: 440px;
+  margin: 14px auto 0;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+.end-card .end-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+
+/* ---- 9. 响应式：只做结构变换 ----
+   ≤860px：章节留白收紧；目录折单列
+   ≤560px：页头上边距收紧；要点格折单列（去竖线改横线）；
+           键值行堆叠、收尾按钮通栏、触控目标 ≥44px */
+@media (max-width: 860px) {
+  .content-section { padding-top: 64px; }
+  .toc { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  /* 页头 */
+  .page-head { padding-top: calc(var(--nav-height) + 36px); }
+  .page-head .head-rule { margin-top: 32px; }
+  .page-head h1 { font-size: clamp(30px, 8.4vw, 38px); }
+
+  /* 目录条目：整行 44px 触控高度 */
+  .toc { padding-top: 24px; }
+  .toc a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  /* 正文章奏 */
+  .content-section { padding-top: 56px; }
+  .prose h2 { gap: 12px; }
+  .prose h3 { margin-top: 32px; }
+  .pull-quote { padding-left: 18px; }
+  .pull-quote p { font-size: 17px; }
+
+  /* 要点网格：单列 */
+  .key-grid { grid-template-columns: 1fr; }
+  .key-grid .key-cell:nth-child(odd) { border-right: 0; }
+  .key-grid .key-cell:nth-child(-n+3) { border-bottom: 1px solid var(--hairline); }
+  .key-grid .key-cell:last-child { border-bottom: 0; }
+  .key-cell { padding: 22px 18px; }
+
+  /* 键值数据表：键/值上下堆叠，值左对齐（长内容不再被挤压） */
+  .data-rows header { padding: 12px 16px; }
+  .data-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 12px 16px;
+  }
+  .data-row .v { text-align: left; }
+
+  /* 配图框内边距收紧 */
+  .figure { margin-top: 32px; }
+  .figure .figure-frame { padding: 12px; }
+
+  /* 收尾卡 */
+  .page-end { margin: 72px 0; }
+  .end-card {
+    padding: 36px 20px;
+    outline-offset: 2px;
+  }
+  .end-card .end-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .end-card .end-actions .btn { width: 100%; }
+}
+
+/* 触屏设备：目录为页内锚点链接，点击后页面不跳转，
+   取消其粘滞 hover 配色（本段置于文件末尾以覆盖上方定义） */
+@media (hover: none) {
+  .toc a:hover { color: var(--color-text-secondary); }
+  .toc a:hover .toc-num { color: var(--ink-300); }
+}

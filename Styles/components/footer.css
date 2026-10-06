@@ -1,0 +1,139 @@
+/* ============================================================
+   页脚 —— 浅色、安静、顶部一条发丝线（Vercel 式）
+   ============================================================ */
+
+/* 页脚容器：半透明白 + 毛玻璃，盖在固定背景（z-index:0）之上 */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* 页脚主体网格：品牌栏占 1.6 份，其余三列各占 1 份 */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: 40px;
+  padding: 64px 0 56px;
+}
+
+/* 品牌栏：logo + 一句话简介（图标按高度自适应宽度，避免拉伸） */
+.footer-brand img { height: 120px; width: auto; margin-bottom: 10px; margin-left: 20px; }
+.footer-brand p {
+  max-width: 260px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* 链接列（Project / Research / Team）的列标题 */
+.footer-col h4 {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-bottom: 14px;
+}
+.footer-col ul { display: grid; gap: 10px; }
+.footer-col a {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+.footer-col a:hover { color: var(--ink-900); }
+
+/* 底部版权行：左侧版权、右侧等宽小字，两端对齐 */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 28px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12.5px;
+  color: var(--ink-300);
+}
+.footer-bottom .mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* ---------- 合作院校徽标行 ----------
+   两枚大学 logo 均为白色透明底 PNG，直接放在浅色页脚上不可见，
+   因此各垫一块深墨绿圆角底片（与 CTA 带同色系），保证对比度与协调感 */
+.footer-unis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 0 40px;
+}
+.uni-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  background: var(--ink-900);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease;
+}
+.uni-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+/* 徽标图：按各自宽高比限高，横向 logo 自然收缩 */
+.uni-chip img {
+  display: block;
+  height: 55px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+/* 平板宽度：四列变两列，品牌栏独占整行；
+   链接条目补足 44px 触控高度（间距相应收紧） */
+@media (max-width: 860px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-brand img { height: 96px; margin-left: 0; }
+  .footer-col ul { gap: 2px; }
+  .footer-col a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+/* 手机宽度：单列堆叠，版权行改为上下排列；
+   院校徽标行两芯片等分屏宽，图片按芯片宽度收缩不溢出 */
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; padding: 48px 0 36px; }
+  .footer-brand img { height: 84px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .footer-unis { gap: 12px; padding-bottom: 32px; }
+  .uni-chip {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 64px;
+    padding: 0 12px;
+  }
+  .uni-chip img {
+    height: 42px;
+    max-width: 100%;
+  }
+}
+
+/* 触屏设备：取消页脚链接/徽标的粘滞 hover（本文件为全站最后加载的
+   组件样式，同优先级下可覆盖上方 :hover 定义） */
+@media (hover: none) {
+  .footer-col a:hover { color: var(--color-text-muted); }
+  .uni-chip:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+}

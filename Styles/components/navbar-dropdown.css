@@ -1,0 +1,187 @@
+/* ============================================================
+   导航栏下拉子菜单 —— 附加样式（在 navbar.css 之后加载）
+   仅新增 .nav-item / .nav-dropdown 规则，不修改原有样式；
+   移动端（≤860px）子菜单在折叠面板内直接展开为缩进列表
+   ============================================================ */
+
+/* 导航栏整体加高：64px → 76px（覆盖 variables.css 中的 --nav-height；
+   页面顶部留白、导航内层高度均引用该变量，自动同步；
+   .nav-inner 本身是 flex + align-items:center，加高后元素仍垂直居中） */
+:root {
+  --nav-height: 76px;
+}
+
+/* 修复文字下行字母（y/p 降部）被裁剪：
+   提高行高并允许溢出，覆盖 navbar.css 中 .nav-links a 的默认表现 */
+.nav-links a {
+  line-height: 1.5;
+  overflow: visible;
+}
+
+/* 带子菜单的导航项：作为下拉面板的定位参照 */
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 父级按钮：文字与箭头保持同一行，禁止换行；
+   line-height 避免下行字母（y/p 的降部）被裁剪 */
+.nav-parent {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  line-height: 1.5;
+  overflow: visible;
+}
+/* 父级按钮右侧的小箭头（chevron），悬停展开时翻转 */
+.nav-parent .chevron {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+.nav-item:hover .nav-parent .chevron {
+  transform: rotate(180deg);
+}
+
+/* 下拉面板：与导航栏同款的毛玻璃质感（半透明白 + 模糊 + 提饱和），
+   顶部带一条薄荷渐变高光，默认隐藏，悬停时淡入下滑 */
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  padding: 10px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: 0 12px 32px rgba(31, 53, 49, 0.14);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+/* 面板顶部薄荷渐变高光条：呼应品牌色，悬停展开时随之亮起 */
+.nav-dropdown::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(151, 227, 209, 0.9), transparent);
+}
+/* 触发区与面板之间不留缝隙，避免鼠标移动过程中悬停中断 */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+.nav-item:hover .nav-dropdown,
+.nav-item:focus-within .nav-dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 面板内链接：默认态左侧留出指示条空间；悬停时整条右移、
+   左侧亮出薄荷色竖条 + 文字加深，替代单一的浅底 hover */
+.nav-dropdown a {
+  position: relative;
+  padding: 9px 12px 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-700);
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s var(--ease-out), color 0.2s ease, background-color 0.2s ease;
+}
+/* 左侧指示条：默认收起（scaleY 0），悬停时自上而下展开 */
+.nav-dropdown a::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(151, 227, 209, 0.95);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.22s var(--ease-out);
+}
+.nav-dropdown a:hover {
+  color: var(--ink-900);
+  background: rgba(151, 227, 209, 0.14);
+  transform: translateX(4px);
+}
+.nav-dropdown a:hover::before {
+  transform: scaleY(1);
+}
+
+/* ---------- 移动端（≤860px）基础规则：横竖屏共用 ---------- */
+@media (max-width: 860px) {
+  /* 手机端压缩顶栏高度：76 → 60，为内容让出纵向空间。
+     本文件晚于 navbar.css 加载，此处覆盖才能胜过顶部无条件的 76px 声明；
+     面板 top、Hero/页头留白均引用同一变量，自动同步 */
+  :root { --nav-height: 60px; }
+
+  .nav-item { flex-direction: column; align-items: stretch; }
+  .nav-item::after { display: none; }
+  .nav-parent .chevron { display: none; }
+  .nav-dropdown {
+    position: static;
+    min-width: 0;
+    padding: 0 0 0 14px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  /* 移动端隐藏装饰：顶部高光条与悬停指示条 */
+  .nav-dropdown::before { display: none; }
+  /* 缩进的子条目同样保证 44px 触控高度 */
+  .nav-dropdown a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .nav-dropdown a::before { display: none; }
+  .nav-dropdown a:hover { transform: none; }
+}
+
+/* 竖屏手机/平板：折叠菜单只显示一级标题（The problem / The science /
+   The next steps / The team），二级子链接整体隐藏。
+   一级标题本身就是指向对应页面的链接，进入页面后由页内目录（.toc）承接
+   小节跳转。本段在基础规则之后，竖屏时同选择器覆盖上面的展开样式；
+   横屏（orientation: landscape）仍保持子项内联展开 */
+@media (max-width: 860px) and (orientation: portrait) {
+  .nav-dropdown { display: none; }
+  /* 竖屏菜单中的一级标题：加粗 + 主题青绿，突出仅有的四个入口层级。
+     用 .nav-links .nav-parent 提高特异性，覆盖 navbar.css 中
+     .nav-links a 的弱化灰色（--ink-500） */
+  .nav-links .nav-parent {
+    font-weight: 600;
+    color: var(--teal-800);
+  }
+}

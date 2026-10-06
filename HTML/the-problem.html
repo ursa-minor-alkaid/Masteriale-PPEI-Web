@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The problem — A-BITE</title>
+  <link rel="icon" type="image/svg+xml" href="../Assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Styles/base/variables.css">
+  <link rel="stylesheet" href="../Styles/base/reset.css">
+  <link rel="stylesheet" href="../Styles/components/buttons.css">
+  <link rel="stylesheet" href="../Styles/components/navbar.css">
+  <link rel="stylesheet" href="../Styles/components/navbar-dropdown.css">
+  <link rel="stylesheet" href="../Styles/components/background.css">
+  <link rel="stylesheet" href="../Styles/components/footer.css">
+  <link rel="stylesheet" href="../Styles/components/back-to-top.css">  <!-- 返回顶部悬浮按钮（全站共享，components.js 注入） -->
+  <link rel="stylesheet" href="../Styles/pages/content.css">
+  <!-- 背景与导航栏由 components.js 注入（全站一份源码）；main.js 绑定导航交互 -->
+  <script src="../js/components.js" defer></script>
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- 页头：本 section 为顶层栏目，无上层面包屑 -->
+  <header class="page-head container">
+    <p class="micro-label reveal">The problem</p>
+    <h1 class="reveal" style="--reveal-delay:.08s">The problem</h1>
+    <hr class="head-rule reveal" style="--reveal-delay:.16s">
+  </header>
+
+  <!-- 章节速览：每条为完整句标题，充当本章摘要 -->
+  <nav class="toc container reveal" aria-label="Table of contents">
+    <a href="#be-careful"><span class="toc-num">01</span>Everyone tells you to be careful</a>
+    <a href="#how-to-know"><span class="toc-num">02</span>But how are we supposed to know?</a>
+    <a href="#look-alike-diseases"><span class="toc-num">03</span>Two look-alike diseases are spreading</a>
+    <a href="#tests-take-days"><span class="toc-num">04</span>As the only real test takes days</a>
+    <a href="#delayed-mapping"><span class="toc-num">05</span>The outbreak is mapped days after it starts</a>
+  </nav>
+
+  <main>
+
+    <section id="be-careful" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">01</span>Everyone tells you to be careful</h2>
+        <p class="sec-sub reveal">The gap between fear and action</p>
+
+        <p class="reveal">Health authorities repeat the same warning every day: beware of mosquitoes. A single bite can mean weeks of high fever and severe joint pain. The official advice&mdash;long sleeves, repellent, window screens&mdash;is all correct. But it never answers the next question: <strong>careful for how long?</strong> Mosquitoes breed everywhere, and no one can live inside a mosquito net. When "being careful" becomes a permanent burden with no way to know whether you have already been infected, the warning slowly loses its power.</p>
+
+        <p class="reveal">A small A-BITE questionnaire (213 respondents across France, China, Vietnam and other regions) captures the gap: nearly 85% would like a testing device nearby, yet over 20% worry about hygiene and shared equipment. <strong>People are told to be careful, but have no way to find out whether they are already infected.</strong> This uncertainty is the biggest blind spot in public-health communication today.</p>
+      </div>
+    </section>
+
+    <section id="how-to-know" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">02</span>But how are we supposed to know?</h2>
+        <p class="sec-sub reveal">No answer in the critical window</p>
+
+        <p class="reveal">Knowing you should be careful is one thing; knowing whether you are already infected is another. When fever, joint pain and a rash follow a mosquito bite, the obvious question is: dengue or chikungunya? Yet <strong>no combination of symptoms can reliably tell the two diseases apart</strong>.</p>
+
+        <p class="reveal">Both illnesses begin in the same way: sudden high fever, headache, muscle pain and rash. The differences emerge only later&mdash;and they call for different care. So in the first days, the window that matters most, patients and doctors can only guess and wait for laboratory results. More unsettling still, <strong>roughly a quarter to a half of infected people never develop symptoms at all</strong>, unknowingly passing the virus on.</p>
+      </div>
+    </section>
+
+    <section id="look-alike-diseases" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">03</span>Two look-alike diseases are spreading</h2>
+        <p class="sec-sub reveal">Same mosquito, same season, same map</p>
+
+        <p class="reveal">Dengue and chikungunya are among the fastest-spreading mosquito-borne diseases in the world. Dengue infects an estimated 390 million people each year (WHO, 2025); chikungunya has reached more than 100 countries, and France alone reported 809 cases in 2025. The two viruses share the same mosquito, the same regions and the same seasons&mdash;<strong>health systems must track both at once, with tools that are too slow for either</strong>.</p>
+
+        <p class="reveal">Research adds one crucial detail: a bite deposits far more virus into the skin than once assumed, and the skin begins multiplying it within hours&mdash;while the virus reaches detectable levels in the blood only one to two days later. <strong>It is this skin-to-blood time lag that makes every blood-based test start late.</strong></p>
+
+        <p class="ref-cite reveal">Ref. &middot; Styer 2007; Tang 2012</p>
+      </div>
+    </section>
+
+    <section id="tests-take-days" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">04</span>As the only real test takes days</h2>
+        <p class="sec-sub reveal">Every shortcut still ends in a blood draw</p>
+
+        <p class="reveal">The standard confirmation test, PCR, is accurate&mdash;but it requires a fully equipped laboratory and trained technicians. From sampling to report, the process typically takes <strong>24&ndash;72 hours</strong>, and far longer where resources are limited. Antibody tests are simpler, but unreliable in the first days of illness&mdash;and they only reveal past exposure, not a current infection.</p>
+
+        <p class="reveal">Rapid test strips can give an answer in 15&ndash;30 minutes, but they miss about one case in five and exist only for dengue. <strong>All of these tests require blood</strong>, which is a barrier in itself. And even when a result is finally produced, it stays inside a hospital record&mdash;<strong>never feeding the public outbreak map in real time</strong>.</p>
+      </div>
+    </section>
+
+    <section id="delayed-mapping" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">05</span>The outbreak is mapped days after it starts</h2>
+        <p class="sec-sub reveal">The first red dot arrives a week late</p>
+
+        <p class="reveal">Outbreak surveillance today runs on confirmed cases: a patient falls ill, seeks care, is tested, and the result climbs step by step onto the national map. By the time the first case appears there, <strong>the virus has usually been spreading silently for 5&ndash;7 days</strong>. Mild or untested cases stretch the delay further. Epidemiologists call this gap the <strong>reporting lag</strong>&mdash;the core reason every outbreak response arrives late.</p>
+
+        <p class="reveal">Faster methods do exist in the research literature&mdash;portable tests that deliver a result in under an hour&mdash;but they remain small-scale pilots, not a routine, wide-coverage surveillance network.</p>
+
+        <p class="reveal">A-BITE's "testing-as-surveillance" vision is designed to close exactly this gap: <strong>every anonymised test result automatically becomes a data point on the outbreak map</strong>. The moment a result is generated, it is already a surveillance signal&mdash;compressing detection delay from days down to hours.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="page-end">
+    <div class="container">
+      <div class="end-card reveal">
+        <p class="micro-label">Next section</p>
+        <h2>The science</h2>
+        <div class="end-actions">
+          <a class="btn btn-primary" href="the-science.html">Read The science</a>
+          <a class="btn btn-secondary" href="index.html">Back to homepage</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

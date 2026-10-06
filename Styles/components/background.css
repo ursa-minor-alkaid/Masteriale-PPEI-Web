@@ -1,0 +1,115 @@
+/* ============================================================
+   全站共享页面背景 —— 毛玻璃渐变光斑
+   结构：白底基色 → 7 个缓慢漂移的大模糊光斑 → 顶层磨砂玻璃
+   DOM 由 js/components.js 统一注入，各页面无需手写；
+   本文件只负责视觉，被所有页面引用。
+   ============================================================ */
+
+/* 固定全屏容器，铺在内容之下（z-index:-1），不拦截鼠标事件 */
+.page-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #ffffff;
+}
+/* 白底基色层 */
+.page-frost-base {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+}
+/* 每个光斑（blob）：大尺寸、强模糊、缓慢漂移动画 */
+.page-frost-blob {
+  position: absolute;
+  will-change: transform;   /* 提示浏览器提前做合成层优化 */
+}
+.page-frost-blob.b1 { /* 大薄荷光斑：左上角，向顶部与左侧溢出 */
+  width: 68vw; height: 62vh;
+  top: -20%; left: -16%;
+  background: var(--mint-400);
+  opacity: .72;
+  border-radius: 62% 38% 55% 45% / 48% 60% 40% 52%;  /* 不规则"水滴"轮廓 */
+  filter: blur(90px);
+  animation: frost-drift-a 32s ease-in-out infinite alternate;
+}
+.page-frost-blob.b2 { /* 雾灰光斑：右上边缘 */
+  width: 52vw; height: 56vh;
+  top: 2%; right: -18%;
+  background: var(--sage-400);
+  opacity: .8;
+  border-radius: 45% 55% 60% 40% / 55% 42% 58% 45%;
+  filter: blur(100px);
+  animation: frost-drift-b 36s ease-in-out infinite alternate;
+}
+.page-frost-blob.b3 { /* 宽扁薄荷光斑：底部中央 */
+  width: 72vw; height: 48vh;
+  bottom: -22%; left: 16%;
+  background: var(--mint-400);
+  opacity: .62;
+  border-radius: 55% 45% 42% 58% / 50% 55% 45% 50%;
+  filter: blur(110px);
+  animation: frost-drift-c 40s ease-in-out infinite alternate;
+}
+.page-frost-blob.b4 { /* 小雾灰点缀：左中 */
+  width: 26vw; height: 30vh;
+  top: 44%; left: 5%;
+  background: var(--sage-400);
+  opacity: .66;
+  border-radius: 58% 42% 50% 50% / 45% 58% 42% 55%;
+  filter: blur(70px);
+  animation: frost-drift-b 26s ease-in-out infinite alternate-reverse;
+}
+.page-frost-blob.b5 { /* 小薄荷点缀：中上偏右 */
+  width: 22vw; height: 26vh;
+  top: 10%; left: 56%;
+  background: var(--mint-400);
+  opacity: .5;
+  border-radius: 40% 60% 55% 45% / 60% 40% 55% 45%;
+  filter: blur(60px);
+  animation: frost-drift-a 24s ease-in-out infinite alternate-reverse;
+}
+.page-frost-blob.b6 { /* 雾灰光斑：左下角落 */
+  width: 40vw; height: 42vh;
+  bottom: -12%; left: -10%;
+  background: var(--sage-400);
+  opacity: .74;
+  border-radius: 50% 50% 45% 55% / 55% 50% 60% 40%;
+  filter: blur(85px);
+  animation: frost-drift-c 30s ease-in-out infinite alternate;
+}
+.page-frost-blob.b7 { /* 淡薄荷光斑：中下偏右 */
+  width: 30vw; height: 34vh;
+  top: 52%; right: 6%;
+  background: var(--mint-400);
+  opacity: .45;
+  border-radius: 48% 52% 58% 42% / 42% 55% 45% 58%;
+  filter: blur(95px);
+  animation: frost-drift-b 38s ease-in-out infinite alternate-reverse;
+}
+/* 最上层"磨砂玻璃"：再叠一层 48px 模糊，把光斑揉成柔和渐晕 */
+.page-frost-glass {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, .34);
+  -webkit-backdrop-filter: blur(48px);
+  backdrop-filter: blur(48px);
+}
+/* 三套漂移关键帧：不同方向 + 轻微缩放，让光斑缓慢游动 */
+@keyframes frost-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(3.5vw, 2.5vh, 0) scale(1.06); }
+}
+@keyframes frost-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-3vw, 3.5vh, 0) scale(1.08); }
+}
+@keyframes frost-drift-c {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(2.5vw, -3vh, 0) scale(.95); }
+}
+/* 系统开启"减弱动态效果"时停止光斑动画 */
+@media (prefers-reduced-motion: reduce) {
+  .page-frost-blob { animation: none !important; }
+}

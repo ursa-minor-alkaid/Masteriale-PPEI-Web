@@ -1,0 +1,109 @@
+/* ============================================================
+   返回顶部悬浮按钮（全站共享）
+   DOM 由 js/components.js 统一注入；显隐与点击交互见 js/main.js
+  （首页整页翻页模式下由 js/pager.js 暴露的 ABITE_PAGER 接管回顶）。
+
+   设计语言对齐（见 index-design-system.md）：
+   - 造型延续 .btn-secondary 的玻璃质感：半透明白 + 模糊 + 发丝描边；
+   - 标签延续 .micro-label 惯例：Geist Mono / 11px / 0.08em / 大写；
+   - 隐现沿用下拉面板模式：opacity + translateY(8px) + 0.25s var(--ease-out)；
+   - hover 位移克制（箭头上移 2px ≤ 全站 4px 上限），不上浮、不放大。
+   ============================================================ */
+
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 24px;
+  /* 导航 100 之下、页脚（1）与正文之上；
+     首页右侧翻页圆点（z-index 101，垂直居中）与本钮（右下角）位置错开，互不遮挡 */
+  z-index: 90;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 16px 0 14px;
+
+  /* .micro-label 式等宽小标签 */
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+
+  /* .btn-secondary 式玻璃底 */
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  /* 隐藏态：透明度 + 下移 + 脱离可点/可聚焦状态（同 .nav-dropdown 模式）；
+     visibility 延迟切换：等淡出动画播完才真正隐藏，反向出现时立即恢复 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 0.25s var(--ease-out),
+    transform 0.25s var(--ease-out),
+    visibility 0s linear 0.25s,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;  /* 出现时 visibility 立即生效，其余过渡无延迟 */
+}
+
+/* 箭头：沿用全站 SVG 图标约定（stroke=currentColor / 2px / round） */
+.back-to-top svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  transition: transform 0.25s var(--ease-out);
+}
+
+/* 悬停：仅颜色/描边/箭头位移，按钮本体不上浮（全站按钮通则） */
+.back-to-top:hover {
+  color: var(--color-teal);
+  border-color: var(--ink-500);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-md);
+}
+.back-to-top:hover svg {
+  transform: translateY(-2px);  /* 与 .link-arrow 的 3px 位移同量级，克制 */
+}
+
+/* 点击瞬间的轻微回弹反馈 */
+.back-to-top:active svg {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* 小屏：收紧与屏幕边缘的距离，避免挤压正文可读区 */
+@media (max-width: 560px) {
+  .back-to-top {
+    right: 16px;
+    bottom: 16px;
+    height: 38px;
+    padding: 0 14px 0 12px;
+  }
+}
+
+/* 无障碍降级：reset.css 已全局压缩动画时长，
+   此处额外保证 visibility 延迟也一并取消，显隐即刻完成 */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top,
+  .back-to-top svg {
+    transition: none !important;
+  }
+}

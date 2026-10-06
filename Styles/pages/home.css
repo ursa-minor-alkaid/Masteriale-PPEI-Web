@@ -1,0 +1,567 @@
+/* ============================================================
+   首页样式 —— Vercel 式版式组合
+   居中 Hero · 产品主视觉 · 发丝线网格 · 深色 CTA 带
+   （毛玻璃背景已抽离至 Styles/components/background.css，全站共享）
+   ============================================================ */
+
+/* 锚点跳转时预留固定顶栏的高度，避免标题被遮挡 */
+section { scroll-margin-top: 84px; }
+
+/* ================= Hero 首屏 ================= */
+/* 顶部留白压缩（导航高度 + 28px），保证首屏内能完整放下文字区 + 产品图；
+   position:relative 为 JS 注入的点阵画布（.hero-canvas）提供定位上下文 */
+.hero {
+  padding: calc(var(--nav-height) + 28px) 0 56px;
+  text-align: center;
+  position: relative;
+}
+
+/* ---------- Hero 鼠标交互层（main.js 第 4 节注入） ---------- */
+/* 星野画布：铺满 Hero 并垫在内容之下，穿透鼠标事件，绘制动效全在 JS 里。
+   注意：canvas 属于替换元素，只写 inset:0 时 width/height 仍为 auto，
+   会退回"固有尺寸"（即 JS 写入的 HTML 属性值 = Hero 尺寸 × DPR）。
+   在 DPR>1 的屏幕上，画布盒子因此被放大成 Hero 的整数倍并锚定在左上角：
+   星野（按 Hero 尺寸居中绘制）整体向右下偏移，斥力点也按 DPR 倍率错位，
+   光标移到右侧时斥力中心会跑出可视区，表现为动效消失。
+   因此必须显式声明画布尺寸，使其与 Hero 的 padding box 严格一致 */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Hero 内容层整体抬到画布之上（原 z-index 层级不变：产品图仍压文字） */
+.hero .container { position: relative; z-index: 1; }
+/* 鼠标视差外壳：JS 运行时包裹徽章/标题/副标题/按钮组，
+   以及首屏下部"已发表先例条"的两行文字；
+   位移写在无 CSS 过渡的外壳上 —— 不与 .reveal 浮现动画、
+   徽章/按钮自身的悬停过渡冲突 */
+.hero-plx { will-change: transform; }
+
+/* 顶部徽章："NEW · Concept stage — engineering notes now available" */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--hairline);
+  font-size: 13px;
+  color: var(--ink-700);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease;
+}
+.hero-badge:hover { border-color: var(--hairline-strong); }
+/* 徽章内的 "NEW" 小黑标签 */
+.hero-badge .tag {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--ink-900);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* 主标题：超大字号 + 强负字距（clamp 实现响应式字号）
+   字号上限 84 → 60px：为首屏完整展示产品图让出纵向空间。
+   两行排版：加大行距与上下外边距；颜色在 ink-900 基础上略微调淡 */
+.hero h1 {
+  margin: 26px auto 30px;
+  max-width: 900px;
+  font-size: clamp(42px, 6.4vw, 74px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.18;
+  color: #2a443e;
+}
+/* 标题中的强调词 "test" / "network"：青绿渐变文字
+   ——全页唯一的装饰性手法 */
+.hero h1 .accent {
+  background: linear-gradient(100deg, var(--teal-800), var(--teal-600) 55%, var(--sage-600));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* 副标题说明文字：加宽至 820px，让精简后的文案稳定落在两行内 */
+.hero-sub {
+  margin: 14px auto 0;
+  max-width: 820px;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  text-wrap: balance;   /* 换行时各行长度尽量均衡，更美观 */
+}
+/* Hero 按钮组：居中横排，窄屏自动换行 */
+.hero-cta {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- 产品主视觉：机器全家福单独居中 + 两个可拖拽徽章 ----------
+   层叠视差设计：
+   1. 机器图保持原有尺寸规则，在 .hero-visual 内水平居中；
+   2. 负 margin 沿用原值，保持图片上探、底部留白与前后层次不变；
+   3. z-index:2 使图片压在文字层之上；pointer-events:none 让点击穿透，
+      按钮全程可点（视觉遮挡但不拦截交互）；
+   4. 滚动时 main.js 给 img 施加 translateY 补偿 → 图片相对文字缓慢下移，
+      呈现"从文字与按钮后方逐渐显现"的视差效果 */
+.hero-visual {
+  position: relative;   /* 为内部两个绝对定位徽章提供定位上下文 */
+  z-index: 2;
+  margin: -35px auto -110px;  /* 沿用原 .hero-media 外边距，保持版式节奏 */
+  pointer-events: none;       /* 默认穿透，徽章自身恢复可点 */
+}
+.hero-media {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.hero-media img {
+  display: block;
+  /* 由高度驱动尺寸，保持与原单图相同的高度上限（约 556px 高）。
+     64vh 封顶矮视口，39vw 保证图片不超出屏宽 */
+  height: min(55vh, 30vw, clamp(480px, 30vw, 720px));
+  width: auto;
+  will-change: transform;   /* 视差滚动期间保持合成层，避免反复重绘 */
+  /* 白色设备在浅色毛玻璃背景上需要投影拉开层次 */
+  filter: drop-shadow(0 40px 64px rgba(31, 53, 49, 0.20));
+}
+
+/* ---------- Hero 徽章：logo / cute 蚊子（.hero-stamp，可拖拽） ----------
+   波浪花边印章造型：SVG 外框 + 圆形裁剪内嵌图片；
+   使用比背景更深的青绿描边与极浅绿底，在浅色毛玻璃背景上突出。
+   位移（--dx/--dy，由 main.js 拖拽写入）与缩放（--s）分离，
+   因此拖拽松手后悬停放大仍然有效；徽章停留在最后松手的位置 */
+.hero-stamp {
+  position: absolute;
+  width: clamp(72px, 8vw, 128px);
+  aspect-ratio: 1;
+  pointer-events: auto;   /* 父层穿透，徽章恢复交互 */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;     /* 触屏拖拽时不触发整页翻页手势 */
+  transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(var(--s, 1));
+  transition: transform 0.22s var(--ease-out), filter 0.22s ease;
+  filter: drop-shadow(0 4px 12px rgba(31, 53, 49, 0.14));
+}
+/* 悬停：轻微放大 + 投影加深，如同被拿起；移开即恢复 */
+.hero-stamp:hover {
+  --s: 1.06;
+  filter: drop-shadow(0 16px 32px rgba(31, 53, 49, 0.28));
+}
+/* 拖拽中：再放大一档 + 投影加深；关闭过渡保证跟手 */
+.hero-stamp.is-dragging {
+  --s: 1.12;
+  cursor: grabbing;
+  transition: none;
+  filter: drop-shadow(0 16px 32px rgba(31, 53, 49, 0.28));
+}
+/* 波浪花边外框：SVG 填充极浅青绿底，stroke 用品牌青绿加深一级，区别于背景 */
+.hero-stamp svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: rgba(237, 248, 244, 0.92);  /* 极浅青绿，近乎白但带绿调 */
+  stroke: var(--teal-700);          /* 青绿描边，与背景拉开层次 */
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+/* 内嵌 logo：圆形裁剪，居中并略小于外框，露出绿色花边 */
+.hero-stamp img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 68%;
+  height: 68%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  border-radius: 50%;
+  pointer-events: none;   /* 指针事件统一由 .hero-stamp 接收 */
+}
+/* 两徽章初始位置：标题第二行左侧、机器图左上区域，两者错位叠放（见设计稿）。
+   定位基准为 .hero-visual 的 padding box；top 取负值向上探出视觉区，
+   用 vw 使纵向位置随版式缩放同步变化 */
+.hero-stamp-1 {
+  top: -6.9vw;
+  left: 5.9%;
+  z-index: 3;
+}
+.hero-stamp-2 {
+  top: -4vw;
+  left: 15.1%;
+  z-index: 3;
+}
+
+/* ================= 项目属性 + 文献依据条（precedents strip） ================= */
+/* Hero 下方两行小字：项目属性行（原 Hero 副标题，现移至此处）+ 文献依据说明。
+   两行均为居中说明文字，间距按"正文小字 → 等宽标签"的层级收紧
+   （原文献列表已移除，其列表样式一并删除） */
+.precedents {
+  padding: 8px 0 0;
+  text-align: center;
+}
+/* 项目属性行：沿用 .hero-sub 的字号/颜色/行长，仅归零其在 Hero 里的上外边距，
+   与下一行的间距改由 .precedents-label 的 margin-top 控制 */
+.precedents .hero-sub { margin: 0 auto; }
+/* 文献依据说明标签：等宽大写小字 */
+.precedents-label {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+}
+
+/* ================= 通用区块（section） ================= */
+.section { padding: 120px 0 0; }
+
+/* 区块头部：小标签 + 大标题 + 说明文字 */
+.section-head {
+  max-width: 560px;
+  margin-bottom: 48px;
+}
+.section-head.is-center { margin-inline: auto; text-align: center; }
+.section-head h2 {
+  margin-top: 16px;
+  font-size: clamp(28px, 3.6vw, 44px);
+  letter-spacing: -0.035em;
+}
+.section-head p {
+  margin-top: 14px;
+  font-size: 15.5px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- 平台四层：2x2 发丝线网格 ----------
+   外框圆角 + overflow:hidden 裁掉内部贴边线条的溢出 */
+.layer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+/* 奇数格（1、3）右侧画竖线；前两格底部画横线，形成十字分隔 */
+.layer-grid .layer-cell:nth-child(odd) { border-right: 1px solid var(--hairline); }
+.layer-grid .layer-cell:nth-child(-n+2) { border-bottom: 1px solid var(--hairline); }
+
+/* ---------- 数据统计行：四列，上下发丝线夹住 ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.stat-cell {
+  padding: 32px 20px;
+  text-align: center;
+}
+/* 相邻格子之间画竖线（从第二个开始） */
+.stat-cell + .stat-cell { border-left: 1px solid var(--hairline); }
+/* 数字主体 */
+.stat-cell b {
+  display: block;
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+/* 单位上标（µL / min / °C）：缩小、青绿、恢复正常字距 */
+.stat-cell b sup {
+  font-size: 0.45em;
+  font-weight: 500;
+  color: var(--teal-700);
+  margin-left: 2px;
+  letter-spacing: 0;
+}
+/* 数字下方的说明文字 */
+.stat-cell span {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- "卡式盒"左右分栏：左侧文案，右侧规格卡 ---------- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+.split-copy h2 {
+  margin-top: 16px;
+  font-size: clamp(28px, 3.4vw, 40px);
+  letter-spacing: -0.035em;
+}
+.split-copy > p {
+  margin-top: 14px;
+  font-size: 15.5px;
+  color: var(--color-text-muted);
+  max-width: 420px;
+}
+.split-copy .link-arrow { margin-top: 24px; }
+
+/* 分栏右列的产品全家福（透明 PNG，投影浮起） */
+.split-media { margin: 0; }
+.split-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 36px 64px rgba(31, 53, 49, 0.18));
+}
+
+/* 通栏规格卡：跟在分栏下方时拉开间距 */
+.spec-card-full { margin-top: clamp(40px, 6vw, 64px); }
+
+/* 规格表卡片：标题栏 + 逐行"键/值" */
+.spec-card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+/* 卡片标题栏（"cartridge — at a glance"）：等宽大写小字 */
+.spec-card header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+/* 规格行：键左值右，两端对齐 */
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 13px 20px;
+  font-size: 13.5px;
+}
+.spec-row + .spec-row { border-top: 1px solid var(--hairline); }  /* 行间分隔线 */
+.spec-row .k {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-300);
+  flex-shrink: 0;
+}
+.spec-row .v {
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+/* ---------- 更新日志（changelog）---------- */
+.changelog {
+  border-top: 1px solid var(--hairline);
+}
+/* 每条 = 日期 + 内容，基线对齐 */
+.changelog li {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--hairline);
+  transition: background-color 0.2s ease;
+}
+.changelog li:hover { background: rgba(255, 255, 255, 0.45); }  /* 悬停轻微提亮 */
+/* 日期列：等宽、固定最小宽度，保证多行对齐 */
+.changelog time {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-300);
+  flex-shrink: 0;
+  min-width: 86px;
+}
+.changelog p {
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+}
+.changelog p b { font-weight: 600; color: var(--color-text); }
+
+/* ---------- CTA 带：通栏深色 + 网格线纹理 ----------
+   四层背景叠加：横向细线网格 + 纵向细线网格 +
+   顶部青绿光晕 + 深青→墨色斜向渐变 */
+.cta-section {
+  margin-top: 120px;
+  padding: clamp(88px, 12vw, 150px) 24px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    radial-gradient(60% 90% at 50% 0%, rgba(65, 166, 141, 0.25), transparent 70%),
+    linear-gradient(160deg, var(--teal-900), var(--color-section-dark));
+  background-size: 44px 44px, 44px 44px, cover, cover;  /* 网格间距 44px */
+  text-align: center;
+}
+/* CTA 大标题："You got A-BITE, we got you."
+   字间距由 -0.04em 调宽至 -0.02em（略松，更易读） */
+.cta-section h2 {
+  font-size: clamp(32px, 5vw, 56px);
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  max-width: 700px;
+  margin-inline: auto;
+}
+/* CTA 说明文字 */
+.cta-section p {
+  margin: 18px auto 0;
+  max-width: 480px;
+  font-size: 15.5px;
+  color: var(--sage-400);
+}
+.cta-section .hero-cta { margin-top: 36px; }
+
+/* ================= 响应式适配 ================= */
+/* 平板及以下（≤860px）：缩小区块间距、分栏变单列、统计行变 2x2 */
+@media (max-width: 860px) {
+  .section { padding-top: 88px; }
+  .split { grid-template-columns: 1fr; gap: 32px; }
+  /* 分栏变上下堆叠后，产品图限宽居中，避免占满整行显得笨重 */
+  .split-media { max-width: 520px; margin-inline: auto; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  /* 2x2 后第 3 格不再需要左竖线，改画顶部横线分隔两行 */
+  .stat-cell:nth-child(3) { border-left: 0; }
+  .stat-cell:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+}
+
+/* 手机（≤560px）：压缩 Hero 留白、网格全部变单列、按钮通栏、键值行堆叠 */
+@media (max-width: 560px) {
+  /* ---- Hero ---- */
+  .hero { padding: calc(var(--nav-height) + 20px) 0 40px; }
+  /* 主标题下限收到 31px：320px 窄屏下每组句子换行不超过两行 */
+  .hero h1 {
+    margin: 18px auto 22px;
+    font-size: clamp(31px, 8.6vw, 40px);
+    line-height: 1.2;
+  }
+  /* 徽章允许文案换行，避免长文本溢出屏幕 */
+  .hero-badge {
+    max-width: 100%;
+    padding: 6px 12px 6px 8px;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: normal;
+  }
+  /* 按钮组：纵向通栏堆叠（50px 高整行可点，触控面积充足），
+     max-width 360 限制大屏手机上的按钮宽度，避免过宽 */
+  .hero-cta {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+  .hero-cta .btn { width: 100%; }
+  /* 小屏机器图按宽度缩放；徽章分列机器图上方两角 */
+  .hero-visual { margin: -8px auto -52px; }
+  .hero-media img { height: auto; width: min(280px, 72vw); }
+  .hero-stamp { width: clamp(52px, 15vw, 68px); }
+  .hero-stamp-1 { top: -5vw; left: 1%; }
+  .hero-stamp-2 { top: -5vw; left: auto; right: 1%; }
+  .precedents-label { margin-top: 10px; }
+
+  /* ---- 区块节奏 ---- */
+  .section { padding-top: 64px; }
+  .section-head { margin-bottom: 32px; }
+
+  /* ---- 四层网格：单列，去竖线、除最后一格外画底线 ---- */
+  .layer-grid { grid-template-columns: 1fr; }
+  .layer-grid .layer-cell:nth-child(odd) { border-right: 0; }
+  .layer-grid .layer-cell:nth-child(-n+3) { border-bottom: 1px solid var(--hairline); }
+  .layer-cell { padding: 24px 20px; }
+
+  /* ---- 统计行：单列，格间改顶线分隔 ---- */
+  .stats-row { grid-template-columns: 1fr; }
+  .stat-cell { padding: 22px 16px; }
+  .stat-cell + .stat-cell { border-left: 0; border-top: 1px solid var(--hairline); }
+
+  /* ---- 规格卡：键/值上下堆叠，值左对齐 ---- */
+  .spec-card header { padding: 12px 16px; }
+  .spec-row {
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px 16px;
+  }
+  .spec-row .v { text-align: left; }
+  /* 箭头文字链接补足触控高度 */
+  .split-copy .link-arrow { margin-top: 18px; min-height: 44px; }
+
+  /* ---- 更新日志：日期与内容上下排 ---- */
+  .changelog li { flex-direction: column; gap: 4px; padding: 14px 2px; }
+
+  /* ---- CTA 带：按钮同样通栏堆叠，四周留白收紧 ---- */
+  .cta-section { margin-top: 72px; padding: 64px 16px; }
+  .cta-section .hero-cta { margin-top: 28px; }
+}
+
+/* 窄屏手机（≤380px，含 320px 老规格）：标题、图片、徽章再收一档 */
+@media (max-width: 380px) {
+  .hero h1 { font-size: clamp(28px, 9vw, 33px); }
+  .hero-media img { width: min(240px, 70vw); }
+  .hero-stamp { width: clamp(46px, 15vw, 56px); }
+  .stat-cell b { font-size: 26px; }
+}
+
+/* 触屏设备：取消首页元素的粘滞 hover 态（触屏无悬停，
+   点击后 hover 样式会残留到下次点击）。本段置于文件末尾，
+   保证同优先级下覆盖上方的 :hover 定义 */
+@media (hover: none) {
+  .hero-stamp:hover {
+    --s: 1;
+    filter: drop-shadow(0 4px 12px rgba(31, 53, 49, 0.14));
+  }
+  .changelog li:hover { background: transparent; }
+}
+
+/* ================= 大屏适配（≥1440px） =================
+   高分辨率显示器上，1080px 固定容器与各字号上限会让整页内容缩在屏幕正中央
+   一小块（2K 宽屏下容器仅占屏宽约 42%）。下面把容器宽度与关键排版改为
+   "随笔宽平滑放大"：各 clamp 的下限取原来的上限值，因此 1440px 以下的表现
+   与原来完全一致，1440px 以上连续放大、不产生断点跳变。
+   宽高比适配走两条线，保证既不溢出、也不显小：
+   1. 横向由 vw 驱动：容器约 69vw（1920 屏约 1325px）、主标题最大 86px，
+      内容横向铺开占视口宽度的三分之二左右；
+   2. 纵向由 vh 封顶：产品图高不超过屏高的 72%，宽而矮的屏幕（21:9、16:9 的
+      矮窗口）不会因图片过高撑爆首屏；很"高"的屏幕（4:3、16:10）则由图宽
+      上限 1100px 兜住，避免图片被纵向拉得过大。
+   说明：home.css 仅首页加载，所以该规则只作用于首页（含首页内嵌的导航与页脚，
+   保证横向对齐），其余页面仍按 variables.css 的 1080px 容器显示。 */
+@media (min-width: 1440px) {
+  /* 容器：1080 → 1720（约 69vw），左右边距同时放宽到 32px */
+  .container { width: min(100% - 64px, clamp(1080px, 69vw, 1720px)); }
+
+  /* Hero：主标题下限 74px 与基础规则上限衔接，≥1440px 连续放大至 98px、
+     副标题 17 → 21px。产品图为机器全家福单独居中，高度由主规则按 vh/vw
+     连续缩放，无需断点覆盖 */
+  .hero h1 { max-width: 1240px; font-size: clamp(74px, 4.6vw, 98px); }
+  .hero-sub { max-width: 1120px; font-size: clamp(17px, 1.15vw, 21px); }
+
+  /* 区块标题、统计数字与正文说明同步放大，与容器保持同一比例关系 */
+  .section-head { max-width: 640px; }
+  .section-head h2 { font-size: clamp(44px, 2.8vw, 58px); }
+  .split-copy h2 { font-size: clamp(40px, 2.5vw, 52px); }
+  .stat-cell b { font-size: clamp(40px, 2.5vw, 52px); }
+  .cta-section h2 { font-size: clamp(56px, 3.6vw, 74px); }
+  .section-head p,
+  .split-copy > p { font-size: clamp(15.5px, 1vw, 17.5px); }
+  .layer-cell p,
+  .changelog p { font-size: clamp(14.5px, 0.9vw, 16px); }
+
+  /* 区块垂直节奏随笔高微调：高屏上内容不会全部聚在视口中央 */
+  .section { padding-top: clamp(120px, 11vh, 176px); }
+}

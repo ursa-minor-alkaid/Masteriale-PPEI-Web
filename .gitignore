@@ -1,0 +1,38 @@
+NOTES.md
+index-design-system.md
+/references
+/.trae
+
+# ── 图片白名单：仅上传网页实际引用的图片 ──
+# 1) 忽略 Assets 下所有图片
+/Assets/**/*.png
+/Assets/**/*.svg
+/Assets/**/*.webp
+/Assets/**/*.jpg
+/Assets/**/*.jpeg
+/Assets/**/*.gif
+/Assets/**/*.avif
+
+# 2) 放行网页中实际引用的文件
+# 图标
+!/Assets/icons/favicon.svg
+!/Assets/icons/ICON (1).png
+!/Assets/icons/ICON (2).png
+!/Assets/icons/ICON-cute.png
+!/Assets/icons/EVRY-trimmed.png
+!/Assets/icons/HUST.png
+!/Assets/icons/logo-mark.png
+# 正文插图
+!/Assets/images/placeholder-figure.svg
+!/Assets/images/Machine Concept-Photoroom.png
+# 压缩派生图
+!/Assets/opt/evry-520.webp
+!/Assets/opt/footer-brand-320.webp
+!/Assets/opt/hust-640.webp
+!/Assets/opt/logo-mark-128.webp
+!/Assets/opt/machine-480.webp
+!/Assets/opt/machine-720.webp
+!/Assets/opt/machine-1024.webp
+!/Assets/opt/machine-1280.webp
+!/Assets/opt/stamp-cute-256.webp
+!/Assets/opt/stamp-logo-256.webp

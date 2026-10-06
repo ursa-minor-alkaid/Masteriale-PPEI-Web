@@ -1,0 +1,45 @@
+/* ============================================================
+   卡片与网格单元 —— 发丝级描边、极简外观
+   ============================================================ */
+
+/* 通用玻璃卡片：浮在毛玻璃背景之上
+   半透明白底 + 背景模糊 + 浅色描边；悬停时描边加深并出现浅阴影 */
+.card {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.card:hover {
+  border-color: var(--hairline-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+/* "平台四层"网格中的单个格子（2x2 布局，见 home.css 的 .layer-grid）
+   格子本身无边框，分隔线由 .layer-grid 用 nth-child 统一绘制 */
+.layer-cell {
+  padding: 32px 28px;
+}
+/* 序号（01/02/03/04）：等宽小字，青绿色 */
+.layer-cell .num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal-700);
+  letter-spacing: 0.06em;
+}
+/* 格子标题（Recipe / Cartridge / Reader / Surveillance） */
+.layer-cell h3 {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+/* 格子说明文字 */
+.layer-cell p {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}

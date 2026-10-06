@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640">
+  <!-- 内容页配图占位资源（配色取自设计系统：mist-50 / sage-300 / sage-600 / sage-400）
+       实际配图就位后，页面中引用本文件的 <img> 请替换为真实图片路径 -->
+  <rect width="1200" height="640" fill="#f4f8f7"/>
+  <rect x="1" y="1" width="1198" height="638" fill="none" stroke="#cbdad6" stroke-width="2"/>
+  <g stroke="#bcd2cd" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="480" y="196" width="240" height="164" rx="14"/>
+    <path d="M480 320l70-58 56 46 46-34 68 46"/>
+    <circle cx="546" cy="243" r="15" fill="#bcd2cd" stroke="none"/>
+  </g>
+  <text x="600" y="436" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="26" letter-spacing="4" fill="#86a49d">IMAGE PLACEHOLDER</text>
+  <text x="600" y="476" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="18" letter-spacing="2" fill="#a4beb8">1200 × 640</text>
+</svg>

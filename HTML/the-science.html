@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The science — A-BITE</title>
+  <link rel="icon" type="image/svg+xml" href="../Assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Styles/base/variables.css">
+  <link rel="stylesheet" href="../Styles/base/reset.css">
+  <link rel="stylesheet" href="../Styles/components/buttons.css">
+  <link rel="stylesheet" href="../Styles/components/navbar.css">
+  <link rel="stylesheet" href="../Styles/components/navbar-dropdown.css">
+  <link rel="stylesheet" href="../Styles/components/background.css">
+  <link rel="stylesheet" href="../Styles/components/footer.css">
+  <link rel="stylesheet" href="../Styles/components/back-to-top.css">  <!-- 返回顶部悬浮按钮（全站共享，components.js 注入） -->
+  <link rel="stylesheet" href="../Styles/pages/content.css">
+  <!-- 背景与导航栏由 components.js 注入（全站一份源码）；main.js 绑定导航交互 -->
+  <script src="../js/components.js" defer></script>
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+
+  <header class="page-head container">
+    <p class="micro-label reveal">The science</p>
+    <h1 class="reveal" style="--reveal-delay:.08s">The science</h1>
+    <hr class="head-rule reveal" style="--reveal-delay:.16s">
+  </header>
+
+  <!-- 章节速览：证据链四环 + 待填补的空白 -->
+  <nav class="toc container reveal" aria-label="Table of contents">
+    <a href="#virus-dose"><span class="toc-num">01</span>A bite deposits far more virus than we assumed</a>
+    <a href="#early-replication"><span class="toc-num">02</span>The skin starts replicating it within hours</a>
+    <a href="#microneedle-access"><span class="toc-num">03</span>Microneedles can reach that fluid without drawing blood</a>
+    <a href="#reading-rna"><span class="toc-num">04</span>We already know how to read it</a>
+    <a href="#the-gap"><span class="toc-num">05</span>The fluid under the bite</a>
+  </nav>
+
+  <main>
+
+    <section id="virus-dose" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">01</span>A bite deposits far more virus than we assumed</h2>
+        <p class="sec-sub reveal">Virus dose</p>
+
+        <p class="reveal">A mosquito does not simply draw blood when it bites. It probes the skin repeatedly, injecting saliva each time&mdash;and if the mosquito carries a virus, that saliva is loaded with <strong>large numbers of infectious viral particles</strong>.</p>
+
+        <p class="reveal">For years, the dose delivered by a single bite could only be estimated indirectly. Styer et al. (2007) measured it directly from mosquito saliva and found that <strong>one bite can deposit tens of thousands of infectious particles into the skin</strong>&mdash;far more than earlier estimates. The bite site is therefore not just an entry point: within minutes, it becomes a concentrated local reservoir of virus. The best place to detect the virus early is the bite site itself, not the blood. This insight is the starting point of A-BITE.</p>
+
+        <p class="ref-cite reveal">Ref. &middot; Styer 2007</p>
+      </div>
+    </section>
+
+    <section id="early-replication" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">02</span>The skin starts replicating it within hours</h2>
+        <p class="sec-sub reveal">Early replication</p>
+
+        <p class="reveal">The skin was long treated as a passive barrier: the virus enters, crosses into the blood, and only then begins to multiply. Tang et al. (2012) <strong>turned this timeline on its head</strong>. The skin is full of living cells that dengue and chikungunya viruses can infect&mdash;and within hours of a bite, the virus begins multiplying in them. The bite site becomes the body's first virus-producing factory.</p>
+
+        <p class="reveal">In other words, the virus is already active locally <strong>a day or more before it can be found in the blood</strong>. Waiting for a blood test means missing the earliest window; sampling the skin at the bite site means catching the virus exactly where and when it is most concentrated. A-BITE's sampling strategy is a direct engineering answer to this skin-first biology.</p>
+
+        <p class="ref-cite reveal">Ref. &middot; Tang 2012</p>
+      </div>
+    </section>
+
+    <section id="microneedle-access" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">03</span>Microneedles can reach that fluid without drawing blood</h2>
+        <p class="sec-sub reveal">Microneedle access</p>
+
+        <p class="reveal">Just beneath the skin surface lies the interstitial fluid&mdash;the liquid that fills the spaces between cells. When an infection begins nearby, this fluid can carry <strong>viral particles and viral RNA</strong>. Unlike blood, it can be reached without puncturing a vessel.</p>
+
+        <p class="reveal">Microneedles make this practical. An array of needles less than a millimetre long passes through the outer skin layers but stops above the blood vessels and pain nerves&mdash;the procedure is <strong>painless and blood-free</strong> (Al Sulaiman et al., 2019). A-BITE needs only a few microlitres of fluid, collected by a small patch in under 25 minutes. No syringe, no sharps waste, no professional required&mdash;<strong>sampling becomes as simple as applying a patch</strong>.</p>
+
+        <p class="ref-cite reveal">Ref. &middot; Al Sulaiman 2019</p>
+      </div>
+    </section>
+
+    <section id="reading-rna" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">04</span>We already know how to read it</h2>
+        <p class="sec-sub reveal">Reading the RNA</p>
+
+        <p class="reveal">Once the fluid is collected, the device must answer one question quickly: does it contain dengue or chikungunya RNA? A-BITE's answer is <strong>RT-LAMP</strong>&mdash;a molecular test that, unlike PCR, runs at a single constant temperature and needs no repeated heating cycles.</p>
+
+        <p class="reveal">That one simplification changes the hardware completely: a small heater, an LED and a light sensor are enough to amplify a few RNA copies a billion-fold and read the result within <strong>20&ndash;40 minutes</strong>. Researchers have already demonstrated the full chain&mdash;reagents freeze-dried into a disposable tube with no refrigeration (Yaren 2017), detection built into a 3D-printed box (Priye 2017). <strong>In short: the chemistry that turns a drop of skin fluid into a clear yes/no answer already exists, and the instrument can fit in a hand.</strong></p>
+
+        <p class="ref-cite reveal">Ref. &middot; Yaren 2017; Priye 2017; Ribeiro da Silva 2024; Prado 2024</p>
+      </div>
+    </section>
+
+    <section id="the-gap" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">05</span>The fluid under the bite</h2>
+        <p class="sec-sub reveal">The link no one has measured</p>
+
+        <p class="reveal">The four links now seem complete: a bite delivers a large viral dose; the skin amplifies it within hours; microneedles can reach that fluid without blood; and a portable test can read the RNA. But one link is missing&mdash;<strong>no published study has ever connected them in a single system</strong>.</p>
+
+        <p class="reveal">The open question is precise: <strong>in the fluid directly beneath a mosquito bite, how much viral RNA appears, and how early?</strong> Viral RNA has been measured in blood, saliva and urine&mdash;but never in the bite-site fluid where it logically appears first. A-BITE's laboratory work is designed to take exactly this measurement. The answer will decide whether the entire "testing-as-surveillance" system is viable&mdash;it is the project's most fundamental scientific checkpoint.</p>
+
+        <p class="ref-cite reveal">No published study &middot; INOVACHIK 2022; Viruses 2024: blood, saliva, urine only (to cite)</p>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="page-end">
+    <div class="container">
+      <div class="end-card reveal">
+        <p class="micro-label">Next section</p>
+        <h2>The next steps</h2>
+        <div class="end-actions">
+          <a class="btn btn-primary" href="the-next-steps.html">Read The next steps</a>
+          <a class="btn btn-secondary" href="index.html">Back to homepage</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

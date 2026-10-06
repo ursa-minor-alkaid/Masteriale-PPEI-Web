@@ -1,0 +1,88 @@
+/* ============================================================
+   A-BITE 设计令牌（Design Tokens）
+   ——本文件集中定义全站复用的 CSS 变量，其它样式文件一律通过
+     var(--xxx) 引用，改这里即可全局生效。
+   配色：低饱和度的青绿色（teal-green）+ 灰绿色 + 白色
+   风格参照：vercel.com —— 发丝级（hairline）细边框、克制的阴影、
+             紧凑的无衬线字体、等宽字体做小标签
+   ============================================================ */
+
+:root {
+  /* ---- 青绿-薄荷色阶（mint，由浅 → 深）----
+     用于背景光斑、高亮文字、终端输出中的"阳性/成功"等着色 */
+  --mint-100: #dcf5ee;
+  --mint-200: #c4eee3;
+  --mint-300: #ade9da;
+  --mint-400: #97e3d1;
+  --mint-500: #7fd8c3;
+
+  /* ---- 灰绿 / 雾灰中性色阶（mist / sage）----
+     用于次要文字、卡片描边、深色区块上的弱化文字 */
+  --mist-50: #f4f8f7;
+  --mist-100: #eef5f3;
+  --mist-200: #e8efed;
+  --sage-200: #d9e4e1;
+  --sage-300: #cbdad6;
+  --sage-400: #bcd2cd;
+  --sage-500: #a4beb8;
+  --sage-600: #86a49d;
+
+  /* ---- 深青绿与墨色（teal / ink）----
+     ink 系列是"近黑"文字色；teal 系列是品牌强调色 */
+  --teal-600: #41a68d;
+  --teal-700: #35937c;
+  --teal-800: #2f8270;
+  --teal-900: #245f53;
+  --ink-900: #1f3531;   /* 主文字 / 主按钮底色（Vercel 式近黑） */
+  --ink-700: #33504a;   /* 次级文字 */
+  --ink-500: #5c7a72;   /* 弱化文字 */
+  --ink-300: #8ba8a0;   /* 最弱文字（如页脚版权行） */
+
+  /* ---- 语义化令牌（semantic tokens）----
+     不直接描述颜色本身，而是描述"用途"，方便统一换肤 */
+  --color-bg: #fbfdfd;                        /* 页面底色（极浅的冷白） */
+  --color-surface: #ffffff;                   /* 卡片等表面色 */
+  --color-text: var(--ink-900);               /* 正文主色 */
+  --color-text-secondary: var(--ink-700);     /* 正文次色 */
+  --color-text-muted: var(--ink-500);         /* 正文弱化色 */
+  --color-accent: var(--ink-900);             /* 主强调色：Vercel 式近黑主按钮 */
+  --color-accent-hover: var(--ink-700);       /* 主强调色悬停态 */
+  --color-teal: var(--teal-800);              /* 品牌青绿色 */
+  --color-section-dark: #15211e;              /* 深色区块（CTA 带）底色 */
+
+  /* ---- 发丝级边框（Vercel 标志性细节）----
+     用极低透明度的深色描边，营造"若隐若现"的分隔线 */
+  --hairline: rgba(36, 66, 61, 0.12);         /* 常规发丝线 */
+  --hairline-strong: rgba(36, 66, 61, 0.22);  /* 加强的发丝线（悬停时） */
+  --hairline-light: rgba(255, 255, 255, 0.14);/* 深色背景上的发丝线 */
+
+  /* ---- 玻璃拟态（glass）----
+     仅在动画背景之上少量使用：半透明白 + 背景模糊 */
+  --glass-bg: rgba(255, 255, 255, 0.62);      /* 玻璃卡片底色 */
+  --glass-border: rgba(255, 255, 255, 0.7);   /* 玻璃卡片描边 */
+  --glass-blur: 16px;                          /* 背景模糊半径 */
+
+  /* ---- 字体族：Geist Sans（正文）+ Geist Mono（等宽小标签）---- */
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "SF Mono", Consolas, monospace;
+
+  /* ---- 圆角刻度 ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;   /* 胶囊形（按钮、徽章） */
+
+  /* ---- 克制的阴影（三档）---- */
+  --shadow-sm: 0 1px 2px rgba(31, 53, 49, 0.05);
+  --shadow-md: 0 4px 16px rgba(31, 53, 49, 0.08);
+  --shadow-lg: 0 20px 50px rgba(31, 53, 49, 0.14);
+
+  /* ---- 布局常量 ---- */
+  --container: 1080px;   /* 内容容器最大宽度 */
+  --nav-height: 64px;    /* 固定顶栏高度（页面顶部留白据此计算） */
+
+  /* ---- 动效 ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);  /* 统一的缓出曲线 */
+  --duration: 0.6s;                             /* 滚动浮现动画时长 */
+}

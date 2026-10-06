@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The next steps — A-BITE</title>
+  <link rel="icon" type="image/svg+xml" href="../Assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../Styles/base/variables.css">
+  <link rel="stylesheet" href="../Styles/base/reset.css">
+  <link rel="stylesheet" href="../Styles/components/buttons.css">
+  <link rel="stylesheet" href="../Styles/components/navbar.css">
+  <link rel="stylesheet" href="../Styles/components/navbar-dropdown.css">
+  <link rel="stylesheet" href="../Styles/components/background.css">
+  <link rel="stylesheet" href="../Styles/components/footer.css">
+  <link rel="stylesheet" href="../Styles/components/back-to-top.css">  <!-- 返回顶部悬浮按钮（全站共享，components.js 注入） -->
+  <link rel="stylesheet" href="../Styles/pages/content.css">
+  <!-- 背景与导航栏由 components.js 注入（全站一份源码）；main.js 绑定导航交互 -->
+  <script src="../js/components.js" defer></script>
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+
+  <header class="page-head container">
+    <p class="micro-label reveal">The next steps</p>
+    <h1 class="reveal" style="--reveal-delay:.08s">The next steps</h1>
+    <hr class="head-rule reveal" style="--reveal-delay:.16s">
+  </header>
+
+  <!-- 章节速览 -->
+  <nav class="toc container reveal" aria-label="Table of contents">
+    <a href="#acceptability"><span class="toc-num">01</span>175 people said they'd want one nearby</a>
+    <a href="#business-model"><span class="toc-num">02</span>Not at any price, so the first buyer is a public health agency</a>
+    <a href="#deployment"><span class="toc-num">03</span>Who puts them where the risk is known and the bite is fresh</a>
+    <a href="#expansion"><span class="toc-num">04</span>First where the mosquito already lives, then wherever it arrives</a>
+    <a href="#data-ethics"><span class="toc-num">05</span>What the network sells is speed, never identity</a>
+    <a href="what-a-bite-is-not.html"><span class="toc-num">06</span>What A-BITE is not (full page)</a>
+  </nav>
+
+  <main>
+
+    <!-- 01 接受度：问卷结果 + 饼图数据 + 样本构成（图待插入） -->
+    <section id="acceptability" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">01</span>175 people said they'd want one nearby</h2>
+        <p class="sec-sub reveal">Acceptability</p>
+
+        <figure class="figure reveal">
+          <div class="figure-frame">
+            <img src="../Assets/images/placeholder-figure.svg" alt="Acceptability graph placeholder" loading="lazy" decoding="async">
+          </div>
+          <figcaption>Fig. 01 &middot; Acceptability graph (to be inserted)</figcaption>
+        </figure>
+
+        <div class="data-rows reveal">
+          <header>Acceptability pie chart</header>
+          <div class="data-row"><span class="k">Yes</span><span class="v"><b>44.2%</b></span></div>
+          <div class="data-row"><span class="k">Yes, but not in my building</span><span class="v"><b>40.1%</b></span></div>
+          <div class="data-row"><span class="k">No</span><span class="v"><b>6.4%</b></span></div>
+        </div>
+
+        <p class="reveal">"Would you use a device near your home that could quickly tell you whether you have dengue or chikungunya?" We collected 213 questionnaire responses across France, China, Vietnam and other regions; <strong>175 were complete and valid</strong>.</p>
+
+        <p class="reveal">The answer is a qualified yes. <strong>44.2% said yes outright, and 40.1% added "but not in my building"</strong>&mdash;84.3% in total would use it, just not inside their own home. Their top concerns&mdash;hygiene (24.8%), vandalism (20%), shared equipment (18.1%)&mdash;became three direct design decisions: a <em>single-use disposable cartridge</em>, a <em>tamper-resistant wall-mounted reader</em>, and <em>a sterile personal sampling unit for each user</em>. The message is clear: <strong>demand is real, but where the device sits decides whether people accept it</strong>.</p>
+
+        <p class="ref-cite reveal">Small print &middot; sample was 52.6% France, 21.7% China, 12% Vietnam.</p>
+      </div>
+    </section>
+
+    <!-- 02 价格与商业模式：饼图数据 + 付费方判断 + B2G 模型（预算待补） -->
+    <section id="business-model" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">02</span>Not at any price, so the first buyer is a public health agency</h2>
+        <p class="sec-sub reveal">Business model</p>
+
+        <figure class="figure reveal">
+          <div class="figure-frame">
+            <img src="../Assets/images/placeholder-figure.svg" alt="Budget placeholder" loading="lazy" decoding="async">
+          </div>
+          <figcaption>Fig. 02 &middot; Budget (to be inserted)</figcaption>
+        </figure>
+
+        <div class="data-rows reveal">
+          <header>Price pie chart</header>
+          <div class="data-row"><span class="k">Stop at €5</span><span class="v"><b>38.3%</b></span></div>
+          <div class="data-row"><span class="k">Stop at €1</span><span class="v"><b>29.7%</b></span></div>
+        </div>
+
+        <p class="reveal">The survey was equally clear on price: <strong>more than two-thirds of respondents would not pay more than &euro;5</strong> for a complete test&mdash;the price of a coffee.</p>
+
+        <p class="reveal">A cartridge containing freeze-dried reagents and precision optics cannot be manufactured at that price; that is not a pricing-strategy problem, it is the physical cost of the product. The first buyer must therefore be a <strong>public health agency</strong>, following the classic <strong>razor-and-blade</strong> model: readers are publicly funded and installed at fixed sites, cartridges are paid for per test, and health authorities subscribe to a real-time data dashboard. The development budget is approximately <strong>&euro;300,000</strong>.</p>
+
+        <p class="reveal">The honest summary: <em>an individual will not pay to know a day sooner&mdash;but a health system will pay to see an outbreak a week earlier.</em></p>
+      </div>
+    </section>
+
+    <!-- 03 布点位置与选址顾虑 -->
+    <section id="deployment" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">03</span>Who puts them where the risk is known and the bite is fresh</h2>
+        <p class="sec-sub reveal">Deployment</p>
+
+        <div class="data-rows reveal">
+          <header>Measured concerns as siting constraints</header>
+          <div class="data-row"><span class="k">Hygiene</span><span class="v"><b>24.8%</b></span></div>
+          <div class="data-row"><span class="k">Vandalism</span><span class="v"><b>20%</b></span></div>
+          <div class="data-row"><span class="k">Shared equipment</span><span class="v"><b>18.1%</b></span></div>
+        </div>
+
+        <p class="reveal">The survey's message&mdash;<strong>"where" matters as much as "whether"</strong>&mdash;defines the deployment strategy: not one device per household, but devices at the places where the risk is known and the bite is fresh. Three site types qualify: <strong>university campuses</strong> (dense, highly mobile populations), <strong>community clinics and pharmacies</strong> (symptomatic people already visit), and <strong>neighbourhoods under active health alert</strong> during the mosquito season. In each, testing requires no special trip&mdash;it happens while studying, collecting a prescription, or walking home.</p>
+
+        <p class="reveal">The top survey concerns double as siting rules: hygiene &rarr; single-use cartridges; vandalism &rarr; tamper-resistant wall mounting; "shared equipment" aversion &rarr; personal sterile samplers, with sharing limited to the reader you never touch. And deployment <strong>follows the risk</strong>: devices move in with the mosquito season and redeploy when it recedes&mdash;a fleet that travels with the outbreak, not machines left in place for years.</p>
+      </div>
+    </section>
+
+    <!-- 04 地理扩张与多病原扩展 -->
+    <section id="expansion" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">04</span>First where the mosquito already lives, then wherever it arrives.</h2>
+        <p class="sec-sub reveal">Expansion</p>
+
+        <p class="reveal">The mosquito's map is being redrawn. Over the past thirty years, suitable habitat for <em>Aedes</em> mosquitoes has expanded roughly twenty-fold and continues to push toward higher latitudes (Liu-Helmersson et al.). France recorded its first locally acquired chikungunya cases in 2010; by 2025 the count had reached 809. <strong>The mosquito opens the corridor; the virus follows.</strong></p>
+
+        <p class="reveal">A-BITE expands in two phases. <strong>Phase one</strong>: the tropical and subtropical regions already living with both diseases, where fast diagnosis is needed most urgently. <strong>Phase two</strong>: as the mosquito advances, the newly exposed frontiers&mdash;Southern Europe and beyond&mdash;placing devices <strong>before the first local case appears, not after</strong>. The same logic extends the test menu: same reader, same cartridge&mdash;only the dried reagent formula changes, opening the door to Zika, West Nile and yellow fever without new hardware.</p>
+
+        <p class="ref-cite reveal">Note: only chikungunya and dengue are addressed in this project.</p>
+      </div>
+    </section>
+
+    <!-- 05 数据分离与伦理框架 -->
+    <section id="data-ethics" class="content-section">
+      <div class="prose container">
+        <h2 class="reveal"><span class="num">05</span>What the network sells is speed, never identity.</h2>
+        <p class="sec-sub reveal">Data &amp; ethics</p>
+
+        <p class="reveal">"Testing-as-surveillance" carries one non-negotiable rule: <strong>the data must be irreversibly separated from the person it came from</strong>. A single result is a medical fact; thousands of results are an outbreak map&mdash;and a legal and technical firewall must stand between the two.</p>
+
+        <p class="reveal">A-BITE builds this firewall in four layers: <strong>separate consent</strong> for testing and for surveillance use (declining one never blocks the other); <strong>no names or identifiers recorded</strong>&mdash;only time, place and result; <strong>irreversible anonymisation</strong> before any aggregation; and <strong>minimum reporting thresholds</strong>, so that an area with very few tests produces no output at all. The entire system will undergo a Data Protection Impact Assessment under the French CNIL framework. <strong>What this network sells is exactly one thing: a faster, finer outbreak signal&mdash;never a named record.</strong></p>
+
+        <p class="ref-cite reveal">+ ethics concern</p>
+      </div>
+    </section>
+
+    <!-- 整页子节入口 -->
+    <section id="what-a-bite-is-not" class="content-section">
+      <div class="prose container">
+        <p class="micro-label reveal">This subsection is a full page</p>
+        <p class="reveal"><a class="btn btn-secondary" href="what-a-bite-is-not.html">What A-BITE is not</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="page-end">
+    <div class="container">
+      <div class="end-card reveal">
+        <p class="micro-label">Next section</p>
+        <h2>The team</h2>
+        <div class="end-actions">
+          <a class="btn btn-primary" href="team/the-team.html">Read The team</a>
+          <a class="btn btn-secondary" href="index.html">Back to homepage</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

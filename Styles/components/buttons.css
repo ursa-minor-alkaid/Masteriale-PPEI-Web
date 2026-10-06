@@ -1,0 +1,91 @@
+/* ============================================================
+   按钮 —— Vercel 风格：胶囊形、实心近黑主按钮、
+   低调的次按钮，不做上浮/阴影等夸张动效
+   ============================================================ */
+
+/* 按钮基础样式：所有 .btn 变体共用的骨架
+   行内弹性布局让"文字 + 图标"垂直居中并留出间距 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 22px;
+  border: 1px solid transparent;          /* 预留边框位，避免变体切换时尺寸跳动 */
+  border-radius: var(--radius-pill);      /* 胶囊圆角 */
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;                    /* 按钮文字不换行 */
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+/* 按钮内置图标（SVG）统一尺寸 */
+.btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* 主按钮：实心墨色，类似 Vercel 的黑色胶囊 */
+.btn-primary {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+/* 次按钮：半透明白 + 背景模糊（毛玻璃）+ 发丝描边 */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-color: var(--hairline-strong);
+  color: var(--color-text);
+}
+.btn-secondary:hover {
+  border-color: var(--ink-500);   /* 悬停时描边加深 */
+  box-shadow: var(--shadow-sm);   /* 出现极浅阴影 */
+}
+
+/* 深色区块（CTA 带）上使用的按钮 */
+.btn-light {
+  background: #ffffff;            /* 白底深色字 */
+  color: var(--ink-900);
+}
+.btn-light:hover {
+  background: var(--mist-100);
+}
+.btn-outline-light {
+  background: transparent;        /* 透明底 + 半透明白描边 */
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+.btn-outline-light:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* 尺寸变体：大按钮（50px 高）/ 小按钮（34px 高，用于导航栏） */
+.btn-lg { height: 50px; padding: 0 28px; font-size: 15.5px; }
+.btn-sm { height: 34px; padding: 0 14px; font-size: 13.5px; }
+
+/* 带箭头的文字链接（如"Read the engineering notes"） */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--teal-800);
+}
+.link-arrow svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s var(--ease-out);
+}
+/* 悬停时箭头向右轻移，暗示"前往" */
+.link-arrow:hover svg { transform: translateX(3px); }
