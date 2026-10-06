@@ -445,6 +445,92 @@
     });
   }
 
+  /* ---- 4.7 手机端光泽动效自动播放 ----
+     目录与按钮的光泽扫过动效（样式见 content.css）在桌面端由 :hover 触发；
+     手机端（≤860px，与导航折叠断点一致）没有鼠标，改为自动播放：
+     JS 给元素加上与 :hover 同态的 .is-shining 类，过渡播完后移除。
+     节奏约定：
+       - 动画时长约 1.9s；
+       - 目录：动画结束后等待 9s；每项在动画结束后冷却 20s，冷却内不会再次被选中；
+       - 按钮：动画结束后随机等待 8–14s（平均约 11s），无单项冷却；同一容器内并排的按钮轮流播放；
+     元素不在视口内、标签页隐藏、prefers-reduced-motion 时均不播放。 */
+  (function autoShine() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var mobileQuery = window.matchMedia("(max-width: 860px)");
+    var SHINE_MS = 1900;  /* 略大于 CSS 1.65s 过渡时长，确保光泽完整播放 */
+    var TOC_PLAY_GAP = 9000;  /* 目录动画结束后到下一次播放之间的固定间隔 */
+    var TOC_COOLDOWN = 20000;  /* 单个目录项：动画结束后的冷却时间 */
+    function buttonGap() {
+      /* 11s ± 3s：每次重新抽取，范围为 8–14s */
+      return 8000 + Math.random() * 6000;
+    }
+
+    function play(el) {
+      el.classList.add("is-shining");
+      setTimeout(function () { el.classList.remove("is-shining"); }, SHINE_MS);
+    }
+    function inView(el) {
+      var r = el.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight && r.left < window.innerWidth && r.right > 0;
+    }
+
+    /* 目录：随机轮播。
+       采用递归 setTimeout，而不是固定 setInterval，确保“9 秒间隔”从动画结束后开始计算。 */
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+    if (tocLinks.length) {
+      var cooldownEnd = new WeakMap();
+      function runTocShine() {
+        if (!mobileQuery.matches || document.hidden) {
+          setTimeout(runTocShine, 2000);
+          return;
+        }
+        var now = Date.now();
+        var pool = tocLinks.filter(function (el) {
+          return inView(el) && now >= (cooldownEnd.get(el) || 0);
+        });
+        if (!pool.length) {
+          setTimeout(runTocShine, 2000);
+          return;
+        }
+        var pick = pool[Math.floor(Math.random() * pool.length)];
+        /* 冷却从本次动画结束后开始计算，不包含动画播放时间 */
+        cooldownEnd.set(pick, now + SHINE_MS + TOC_COOLDOWN);
+        play(pick);
+        setTimeout(runTocShine, SHINE_MS + TOC_PLAY_GAP);
+      }
+      setTimeout(runTocShine, TOC_PLAY_GAP);
+    }
+
+    /* 按钮：按父容器分组，组内轮流；每组起始相位错开，避免同时闪烁。
+       每轮在动画结束后重新抽取 8–14s 的随机等待时间。 */
+    var groupsByParent = new Map();
+    document.querySelectorAll(".btn-primary, .btn-secondary").forEach(function (b) {
+      var p = b.parentElement;
+      if (!groupsByParent.has(p)) groupsByParent.set(p, []);
+      groupsByParent.get(p).push(b);
+    });
+    var groupIdx = 0;
+    groupsByParent.forEach(function (els) {
+      var i = 0;
+      var offset = (groupIdx++ % 3) * 1200;  /* 0 / 1.2s / 2.4s 相位错开 */
+      function runButtonShine() {
+        if (!mobileQuery.matches || document.hidden) {
+          setTimeout(runButtonShine, 2000);
+          return;
+        }
+        var el = els[i % els.length];
+        i++;
+        if (inView(el)) {
+          play(el);
+          setTimeout(runButtonShine, SHINE_MS + buttonGap());
+        } else {
+          setTimeout(runButtonShine, 2000);
+        }
+      }
+      setTimeout(runButtonShine, offset + buttonGap());
+    });
+  })();
+
   /* ---- 5. 页脚年份 ----
      把 HTML 里 <span data-year> 的占位年份替换为当前年份 */
   var year = document.querySelector("[data-year]");

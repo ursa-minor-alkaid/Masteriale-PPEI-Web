@@ -63,7 +63,10 @@ section { scroll-margin-top: 84px; }
 
 
 /* ---- 2. 目录 .toc ----
-   编号列表 + 锚点跳转；窄双列，移动端折为单列 */
+   编号列表 + 锚点跳转；窄双列，移动端折为单列。
+   悬浮动效与内容页按钮（见 2.5 节）同一语言：薄荷光泽带自左向右缓慢掠过，
+   同步文字转品牌青绿（同 .btn-secondary:hover 的 teal-800）并轻微放大。
+   桌面端由 :hover 触发；手机端无鼠标，由 main.js 以 .is-shining 类自动轮播（二者同态）。 */
 .toc {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -73,16 +76,60 @@ section { scroll-margin-top: 84px; }
 }
 
 .toc a {
+  position: relative;
+  overflow: hidden;               /* 光泽带裁切进条目圆角轮廓 */
   display: flex;
   align-items: baseline;
   gap: 14px;
-  padding: 11px 0;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
   font-size: 14.5px;
   color: var(--color-text-secondary);
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.3s var(--ease-out);
 }
-.toc a:hover { color: var(--ink-900); }
-.toc a:hover .toc-num { color: var(--teal-700); }
+
+/* 薄荷光泽带：默认停在条目右侧之外并保持隐藏。
+   进入时用 keyframes 从左向右完整扫过；离开时不反向播放，
+   只将已经位于右侧之外的光泽带平滑淡出。 */
+.toc a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(151, 227, 209, 0.4), transparent);
+  transform: translateX(300%) skewX(-18deg);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
+@keyframes toc-sheen {
+  0% {
+    transform: translateX(-160%) skewX(-18deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  100% {
+    transform: translateX(300%) skewX(-18deg);
+    opacity: 1;
+  }
+}
+
+/* :hover（桌面悬浮）与 .is-shining（手机端自动播放）同态：
+   光泽带只在进入时播放一次；文字转 teal-800 + 轻微放大（1.03，克制） */
+.toc a:hover,
+.toc a.is-shining {
+  color: var(--teal-800);
+  transform: scale(1.03);
+}
+.toc a:hover::before,
+.toc a.is-shining::before {
+  animation: toc-sheen 1.65s var(--ease-out) both;
+}
+.toc a:hover .toc-num,
+.toc a.is-shining .toc-num { color: var(--teal-700); }
 
 /* 编号：mono teal-700，与全站 .num 约定一致 */
 .toc .toc-num {
@@ -91,6 +138,54 @@ section { scroll-margin-top: 84px; }
   letter-spacing: 0.06em;
   color: var(--ink-300);
   transition: color 0.2s ease;
+}
+
+
+/* ---- 2.5 内容页按钮悬浮动效（.btn-primary / .btn-secondary） ----
+   仅作用于加载本文件的页面（首页不加载 content.css，首页按钮维持原样）。
+   在 buttons.css 基础上叠加“光泽扫过”：一条斜向高光带在悬浮时
+   自左向右掠过胶囊——主按钮用薄荷色高光（呼应全站 mint 体系与玻璃拟态），
+   次按钮用白色高光。动效完全由 ::after 的 transform 完成，
+   按钮本体不上浮、不放大，遵守全站“克制”通则。 */
+.btn-primary,
+.btn-secondary {
+  position: relative;
+  overflow: hidden;   /* 高光带裁切进胶囊轮廓 */
+}
+.btn-primary::after,
+.btn-secondary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  transform: translateX(-160%) skewX(-18deg);  /* 初始藏于按钮左侧之外 */
+  transition: transform 1.65s var(--ease-out);
+  pointer-events: none;
+}
+.btn-primary::after {
+  background: linear-gradient(100deg, transparent, rgba(151, 227, 209, 0.32), transparent);  /* mint-400 光泽 */
+}
+.btn-secondary::after {
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.7), transparent);  /* 玻璃白光泽 */
+}
+/* :hover 与 .is-shining（main.js 自动播放）同态：光泽带掠过 */
+.btn-primary:hover::after,
+.btn-secondary:hover::after,
+.btn-primary.is-shining::after,
+.btn-secondary.is-shining::after {
+  transform: translateX(320%) skewX(-18deg);   /* 掠过至按钮右侧之外 */
+}
+
+/* 主按钮：底色变亮（buttons.css 已有）之外叠一层克制的阴影，增加纵深 */
+.btn-primary:hover {
+  box-shadow: var(--shadow-md);
+}
+/* 次按钮：描边与文字转向品牌青绿，与 .link-arrow / .toc 箭头的 teal 语义一致 */
+.btn-secondary:hover {
+  border-color: var(--teal-700);
+  color: var(--teal-800);
 }
 
 
@@ -403,13 +498,13 @@ section { scroll-margin-top: 84px; }
   .page-head .head-rule { margin-top: 32px; }
   .page-head h1 { font-size: clamp(30px, 8.4vw, 38px); }
 
-  /* 目录条目：整行 44px 触控高度 */
+  /* 目录条目：整行 44px 触控高度（横向内边距与主规则一致） */
   .toc { padding-top: 24px; }
   .toc a {
     min-height: 44px;
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px 14px;
   }
 
   /* 正文章奏 */
@@ -455,8 +550,19 @@ section { scroll-margin-top: 84px; }
 }
 
 /* 触屏设备：目录为页内锚点链接，点击后页面不跳转，
-   取消其粘滞 hover 配色（本段置于文件末尾以覆盖上方定义） */
+   取消其粘滞 hover 状态（放大与变色会残留，须显式复位；
+   光泽带终止态位于元素之外、本身不可见，无需处理）。
+   自动播放见 main.js（.is-shining，不受本段影响） */
 @media (hover: none) {
-  .toc a:hover { color: var(--color-text-secondary); }
+  .toc a:hover {
+    color: var(--color-text-secondary);
+    transform: none;
+  }
   .toc a:hover .toc-num { color: var(--ink-300); }
+  /* 按钮同样复位粘滞 hover，避免点按后颜色/阴影残留 */
+  .btn-primary:hover { box-shadow: none; }
+  .btn-secondary:hover {
+    border-color: var(--hairline-strong);
+    color: var(--color-text);
+  }
 }
