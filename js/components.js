@@ -5,7 +5,7 @@
 
    工作原理：
    1. 通过 document.currentScript.src 推导出站点根路径，
-      因此无论页面位于 HTML/ 还是 HTML/team/ 等更深目录，
+      因此无论页面位于 docs/ 还是 docs/team/ 等更深目录，
       链接与资源路径都能正确解析，页面侧零配置；
    2. 脚本以 defer 方式加载，在 DOM 解析完成后、首次绘制前执行，
       注入过程无闪烁；
@@ -44,7 +44,7 @@
   var navbarHtml =
     '<header class="site-header">' +
       '<nav class="nav-inner container" aria-label="Primary">' +
-        '<a class="nav-logo" href="' + root + 'HTML/index.html">' +
+        '<a class="nav-logo" href="' + root + 'docs/index.html">' +
           /* WebP 仅 7.7KB（原 PNG 124KB）：DPR≥2 屏走 srcset，旧浏览器回退 PNG */
           '<img src="' + root + 'Assets/icons/logo-mark.png" ' +
                'srcset="' + root + 'Assets/opt/logo-mark-128.webp 2x, ' +
@@ -54,42 +54,42 @@
         '</a>' +
         '<div class="nav-links" id="nav-links">' +
           '<div class="nav-item">' +
-            '<a class="nav-parent" href="' + root + 'HTML/the-problem.html">The problem ' + chevron + '</a>' +
+            '<a class="nav-parent" href="' + root + 'docs/the-problem.html">The problem ' + chevron + '</a>' +
             '<div class="nav-dropdown">' +
-              '<a href="' + root + 'HTML/the-problem.html#be-careful">Be careful</a>' +
-              '<a href="' + root + 'HTML/the-problem.html#how-to-know">How to know</a>' +
-              '<a href="' + root + 'HTML/the-problem.html#look-alike-diseases">Look-alike diseases</a>' +
-              '<a href="' + root + 'HTML/the-problem.html#tests-take-days">Tests take days</a>' +
-              '<a href="' + root + 'HTML/the-problem.html#delayed-mapping">Delayed mapping</a>' +
+              '<a href="' + root + 'docs/the-problem.html#be-careful">Be careful</a>' +
+              '<a href="' + root + 'docs/the-problem.html#how-to-know">How to know</a>' +
+              '<a href="' + root + 'docs/the-problem.html#look-alike-diseases">Look-alike diseases</a>' +
+              '<a href="' + root + 'docs/the-problem.html#tests-take-days">Tests take days</a>' +
+              '<a href="' + root + 'docs/the-problem.html#delayed-mapping">Delayed mapping</a>' +
             '</div>' +
           '</div>' +
           '<div class="nav-item">' +
-            '<a class="nav-parent" href="' + root + 'HTML/the-science.html">The science ' + chevron + '</a>' +
+            '<a class="nav-parent" href="' + root + 'docs/the-science.html">The science ' + chevron + '</a>' +
             '<div class="nav-dropdown">' +
-              '<a href="' + root + 'HTML/the-science.html#virus-dose">Virus dose</a>' +
-              '<a href="' + root + 'HTML/the-science.html#early-replication">Early replication</a>' +
-              '<a href="' + root + 'HTML/the-science.html#microneedle-access">Microneedle access</a>' +
-              '<a href="' + root + 'HTML/the-science.html#reading-rna">Reading the RNA</a>' +
+              '<a href="' + root + 'docs/the-science.html#virus-dose">Virus dose</a>' +
+              '<a href="' + root + 'docs/the-science.html#early-replication">Early replication</a>' +
+              '<a href="' + root + 'docs/the-science.html#microneedle-access">Microneedle access</a>' +
+              '<a href="' + root + 'docs/the-science.html#reading-rna">Reading the RNA</a>' +
             '</div>' +
           '</div>' +
           '<div class="nav-item">' +
-            '<a class="nav-parent" href="' + root + 'HTML/the-next-steps.html">The next steps ' + chevron + '</a>' +
+            '<a class="nav-parent" href="' + root + 'docs/the-next-steps.html">The next steps ' + chevron + '</a>' +
             '<div class="nav-dropdown">' +
-              '<a href="' + root + 'HTML/the-next-steps.html#acceptability">Acceptability</a>' +
-              '<a href="' + root + 'HTML/the-next-steps.html#business-model">Business model</a>' +
-              '<a href="' + root + 'HTML/the-next-steps.html#deployment">Deployment</a>' +
-              '<a href="' + root + 'HTML/the-next-steps.html#expansion">Expansion</a>' +
-              '<a href="' + root + 'HTML/the-next-steps.html#data-ethics">Data &amp; ethics</a>' +
-              '<a href="' + root + 'HTML/what-a-bite-is-not.html">What A-BITE is not</a>' +
+              '<a href="' + root + 'docs/the-next-steps.html#acceptability">Acceptability</a>' +
+              '<a href="' + root + 'docs/the-next-steps.html#business-model">Business model</a>' +
+              '<a href="' + root + 'docs/the-next-steps.html#deployment">Deployment</a>' +
+              '<a href="' + root + 'docs/the-next-steps.html#expansion">Expansion</a>' +
+              '<a href="' + root + 'docs/the-next-steps.html#data-ethics">Data &amp; ethics</a>' +
+              '<a href="' + root + 'docs/what-a-bite-is-not.html">What A-BITE is not</a>' +
             '</div>' +
           '</div>' +
           '<div class="nav-item">' +
-            '<a class="nav-parent" href="' + root + 'HTML/team/the-team.html">The team ' + chevron + '</a>' +
+            '<a class="nav-parent" href="' + root + 'docs/team/the-team.html">The team ' + chevron + '</a>' +
             '<div class="nav-dropdown">' +
-              '<a href="' + root + 'HTML/team/us-three.html">Us three</a>' +
-              '<a href="' + root + 'HTML/team/the-team.html#supervision">Supervision</a>' +
-              '<a href="' + root + 'HTML/team/the-team.html#acknowledgements">Acknowledgements</a>' +
-              '<a href="' + root + 'HTML/team/the-program.html">The program</a>' +
+              '<a href="' + root + 'docs/team/us-three.html">Us three</a>' +
+              '<a href="' + root + 'docs/team/the-team.html#supervision">Supervision</a>' +
+              '<a href="' + root + 'docs/team/the-team.html#acknowledgements">Acknowledgements</a>' +
+              '<a href="' + root + 'docs/team/the-program.html">The program</a>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -105,7 +105,7 @@
   var page = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   var isHome = page === "index.html" || page === "";
   var go = function (hash) {
-    return isHome ? hash : root + "HTML/index.html" + hash;
+    return isHome ? hash : root + "docs/index.html" + hash;
   };
 
   var footerHtml =
