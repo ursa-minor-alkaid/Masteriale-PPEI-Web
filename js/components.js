@@ -44,7 +44,7 @@
   var navbarHtml =
     '<header class="site-header">' +
       '<nav class="nav-inner container" aria-label="Primary">' +
-        '<a class="nav-logo" href="' + root + 'docs/index.html">' +
+        '<a class="nav-logo" href="' + root + 'index.html">' +
           /* WebP 仅 7.7KB（原 PNG 124KB）：DPR≥2 屏走 srcset，旧浏览器回退 PNG */
           '<img src="' + root + 'Assets/icons/logo-mark.png" ' +
                'srcset="' + root + 'Assets/opt/logo-mark-128.webp 2x, ' +
@@ -105,7 +105,7 @@
   var page = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
   var isHome = page === "index.html" || page === "";
   var go = function (hash) {
-    return isHome ? hash : root + "docs/index.html" + hash;
+    return isHome ? hash : root + "index.html" + hash;
   };
 
   var footerHtml =
