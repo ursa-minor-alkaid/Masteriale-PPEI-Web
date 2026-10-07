@@ -426,6 +426,32 @@ section { scroll-margin-top: 84px; }
 }
 .cta-section .hero-cta { margin-top: 36px; }
 
+/* CTA 主按钮悬浮：与内容页 .btn-primary 同款的薄荷光泽扫过
+   （content.css 不在首页加载，这里以 CTA 区块为作用域等价实现；
+   白底按钮上薄荷色高光带可见，参数与内容页完全一致） */
+.cta-section .btn-light {
+  position: relative;
+  overflow: hidden;
+}
+.cta-section .btn-light::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(151, 227, 209, 0.32), transparent);
+  transform: translateX(-160%) skewX(-18deg);
+  transition: transform 1.65s var(--ease-out);
+  pointer-events: none;
+}
+.cta-section .btn-light:hover::after {
+  transform: translateX(320%) skewX(-18deg);
+}
+.cta-section .btn-light:hover {
+  box-shadow: var(--shadow-md);
+}
+
 /* ================= 响应式适配 ================= */
 /* 平板及以下（≤860px）：缩小区块间距、分栏变单列、统计行变 2x2 */
 @media (max-width: 860px) {

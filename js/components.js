@@ -100,13 +100,9 @@
     '</header>';
 
   /* ---- 3. 页脚（样式见 Styles/components/footer.css） ----
-     全站与主页页脚完全一致；页内锚点（#platform 等）只在主页存在，
-     因此子页面自动改写为「主页 + 锚点」，保证任何页面上点击都能正确跳转 */
-  var page = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
-  var isHome = page === "index.html" || page === "";
-  var go = function (hash) {
-    return isHome ? hash : root + "index.html" + hash;
-  };
+     三个链接列内容与 local/footer_content.md 保持一致，
+     全部为站外链接，统一新标签页打开（rel=noopener 保证安全） */
+  var ext = ' target="_blank" rel="noopener noreferrer"';
 
   var footerHtml =
     '<footer class="site-footer" id="about">' +
@@ -119,26 +115,24 @@
                  'alt="A-BITE logo" loading="lazy" decoding="async">' +
           '</div>' +
           '<div class="footer-col">' +
-            '<h4>Project</h4>' +
+            '<h4>Related Courses</h4>' +
             '<ul>' +
-              '<li><a href="' + go("#platform") + '">Platform</a></li>' +
-              '<li><a href="' + go("#hardware") + '">Hardware</a></li>' +
-              '<li><a href="' + go("#updates") + '">Updates</a></li>' +
+              '<li><a href="https://www.universite-paris-saclay.fr/en/education/masters-degree/biologie-moleculaire-et-cellulaire/m2-tissue-cell-and-gene-biotherapies-btcg"' + ext + '>BTCG Master</a></li>' +
+              '<li><a href="https://www.univ-evry.fr/intranet/evenements/2026/evenements-du-personnel/les-5-ans-du-ppei.html"' + ext + '>PPEI</a></li>' +
             '</ul>' +
           '</div>' +
           '<div class="footer-col">' +
-            '<h4>Research</h4>' +
+            '<h4>WHO Resources</h4>' +
             '<ul>' +
-              '<li><a href="' + go("#updates") + '">Engineering notes</a></li>' +
-              '<li><a href="' + go("#updates") + '">Recipe versioning</a></li>' +
-              '<li><a href="' + go("#updates") + '">References</a></li>' +
+              '<li><a href="https://www.who.int/news-room/questions-and-answers/item/chikungunya"' + ext + '>WHO: Chikungunya</a></li>' +
+              '<li><a href="https://www.who.int/europe/news-room/questions-and-answers/item/public-health-advice-on-dengue-fever"' + ext + '>WHO: Dengue</a></li>' +
             '</ul>' +
           '</div>' +
           '<div class="footer-col">' +
-            '<h4>Team</h4>' +
+            '<h4>About</h4>' +
             '<ul>' +
-              '<li><a href="' + go("#about") + '">About</a></li>' +
-              '<li><a href="mailto:hello@example.org">Contact</a></li>' +
+              '<li><a href="https://github.com/ursa-minor-alkaid/Masteriale-PPEI-Web"' + ext + '>Source Code</a></li>' +
+              '<li><a href="https://life.hust.edu.cn/info/1968/12075.htm#1"' + ext + '>Bio-Symposium</a></li>' +
             '</ul>' +
           '</div>' +
         '</div>' +

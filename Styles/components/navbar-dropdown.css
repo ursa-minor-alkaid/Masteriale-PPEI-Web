@@ -96,39 +96,54 @@
   pointer-events: auto;
 }
 
-/* 面板内链接：默认态左侧留出指示条空间；悬停时整条右移、
-   左侧亮出薄荷色竖条 + 文字加深，替代单一的浅底 hover */
+/* 面板内链接：悬停动效与内容页目录（.toc a）同一款式 ——
+   薄荷光泽带自左向右扫过，文字同步转品牌青绿并轻微放大。
+   下拉条目比目录条目窄（面板 min-width 220px），故光带相对加宽、
+   扫过行程与时长缩短、缩放幅度收小，保持视觉速度与手感一致；
+   overflow:hidden 把光泽带裁进圆角条目轮廓 */
 .nav-dropdown a {
   position: relative;
-  padding: 9px 12px 9px 18px;
+  overflow: hidden;
+  padding: 9px 14px;
   font-size: 14px;
   font-weight: 500;
   color: var(--ink-700);
   white-space: nowrap;
   border-radius: var(--radius-sm);
-  transition: transform 0.2s var(--ease-out), color 0.2s ease, background-color 0.2s ease;
+  transition: color 0.2s ease, transform 0.3s var(--ease-out);
 }
-/* 左侧指示条：默认收起（scaleY 0），悬停时自上而下展开 */
+/* 薄荷光泽带：默认停在条目右侧之外并保持隐藏；
+   悬停时由 nav-sheen 关键帧自左向右完整扫过，离开时仅淡出 */
 .nav-dropdown a::before {
   content: "";
   position: absolute;
-  left: 6px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  border-radius: 2px;
-  background: rgba(151, 227, 209, 0.95);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.22s var(--ease-out);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  background: linear-gradient(100deg, transparent, rgba(151, 227, 209, 0.4), transparent);
+  transform: translateX(320%) skewX(-18deg);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+@keyframes nav-sheen {
+  0% {
+    transform: translateX(-180%) skewX(-18deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  100% {
+    transform: translateX(320%) skewX(-18deg);
+    opacity: 1;
+  }
 }
 .nav-dropdown a:hover {
-  color: var(--ink-900);
-  background: rgba(151, 227, 209, 0.14);
-  transform: translateX(4px);
+  color: var(--teal-800);
+  transform: scale(1.025);
 }
 .nav-dropdown a:hover::before {
-  transform: scaleY(1);
+  animation: nav-sheen 1.3s var(--ease-out) both;
 }
 
 /* ---------- 移动端（≤860px）基础规则：横竖屏共用 ---------- */
@@ -156,7 +171,7 @@
     transform: none;
     pointer-events: auto;
   }
-  /* 移动端隐藏装饰：顶部高光条与悬停指示条 */
+  /* 移动端隐藏面板顶部薄荷高光条 */
   .nav-dropdown::before { display: none; }
   /* 缩进的子条目同样保证 44px 触控高度 */
   .nav-dropdown a {
@@ -166,6 +181,7 @@
     padding: 8px 12px;
     font-size: 14px;
   }
+  /* 移动端关闭光泽带扫过与放大（触控下无悬停态，见下方 hover:none 复位） */
   .nav-dropdown a::before { display: none; }
   .nav-dropdown a:hover { transform: none; }
 }
@@ -183,5 +199,15 @@
   .nav-links .nav-parent {
     font-weight: 600;
     color: var(--teal-800);
+  }
+}
+
+/* 触屏设备：无真实悬停，点按后 :hover 的青绿变色会残留（下拉条目通常
+   直接跳转页面，但横屏展开列表中可能停留），显式复位为默认色；
+   光泽带与放大已在上面的 ≤860px 规则中关闭 */
+@media (hover: none) {
+  .nav-dropdown a:hover {
+    color: var(--ink-700);
+    transform: none;
   }
 }

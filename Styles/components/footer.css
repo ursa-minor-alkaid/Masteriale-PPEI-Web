@@ -20,8 +20,9 @@
   padding: 64px 0 56px;
 }
 
-/* 品牌栏：logo + 一句话简介（图标按高度自适应宽度，避免拉伸） */
-.footer-brand img { height: 120px; width: auto; margin-bottom: 10px; margin-left: 20px; }
+/* 品牌栏：logo + 一句话简介（图标按高度自适应宽度，避免拉伸）
+   高度与右侧链接列（标题 + 2 条链接）的内容高度吻合 */
+.footer-brand img { height: 88px; width: auto; margin-bottom: 10px; margin-left: 20px; }
 .footer-brand p {
   max-width: 260px;
   font-size: 13.5px;
@@ -101,7 +102,7 @@
 @media (max-width: 860px) {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .footer-brand { grid-column: 1 / -1; }
-  .footer-brand img { height: 96px; margin-left: 0; }
+  .footer-brand img { height: 72px; margin-left: 0; }
   .footer-col ul { gap: 2px; }
   .footer-col a {
     display: flex;
@@ -113,7 +114,7 @@
    院校徽标行两芯片等分屏宽，图片按芯片宽度收缩不溢出 */
 @media (max-width: 560px) {
   .footer-grid { grid-template-columns: 1fr; gap: 28px; padding: 48px 0 36px; }
-  .footer-brand img { height: 84px; }
+  .footer-brand img { height: 64px; }
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
   .footer-unis { gap: 12px; padding-bottom: 32px; }
   .uni-chip {

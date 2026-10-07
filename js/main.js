@@ -1,12 +1,13 @@
 /* ============================================================
    A-BITE 首页交互脚本
-   共 5 个功能：
+   共 6 个功能：
    1. 导航栏滚动状态（滚动后显示发丝底边线）
    2. 移动端菜单开合
    3. 轻量滚动浮现动画（IntersectionObserver 驱动 .reveal）
    4. Hero 交互层：鼠标视差（文字/图片分层跟随）+ 粒子连线跟随鼠标
       （内含原"滚动时产品图从文字后方脱出"的滚动补偿；仅首页 .hero 启用）
-   5. 页脚年份自动更新
+   5. 章节标题装饰斜杠：按实际排版测量几何并写入 --slash-* CSS 变量
+   6. 页脚年份自动更新
    ============================================================ */
 
 /* 立即执行函数 + "use strict"：
@@ -531,7 +532,71 @@
     });
   })();
 
-  /* ---- 5. 页脚年份 ----
+  /* ---- 5. 章节标题装饰斜杠（仅内容页，首页不启用） ----
+     样式见 content.css（.prose h2 + .sec-sub）：一根 14° 细斜杆的伪元素，
+     顶端在标题正文起点，CSS 中 rotate(14deg) 使其自右上向左下倾斜，
+     底端落到副标题行首字符处。几何由本模块按实际排版写入标题上的变量：
+       --slash-l 顶端横坐标（由“底端落在副标题行首”按倾角反推，
+                  桌面端恰好落在编号右侧的标题正文起点）
+       --slash-t 顶端纵坐标（固定高出标题 14px）
+       --slash-h 斜杆长度（沿杆方向，取竖直跨度 / cos(14°)）
+     只测量 offsetTop/offsetHeight 等布局属性，不受 reveal 位移影响；
+     标题在窄屏换行时斜杆沿同一直线自动延长。
+     字体加载、窗口尺寸变化后重新测量（rAF 合帧）。 */
+  (function initSlashMarks() {
+    var ANGLE_RAD = (14 * Math.PI) / 180;
+    var ANGLE_COS = Math.cos(ANGLE_RAD);
+    var ANGLE_TAN = Math.tan(ANGLE_RAD);
+    var TOP_OUT = 14;    /* 顶端高出标题盒的距离（px） */
+    var BOTTOM_OUT = 16; /* 底端越过副标题盒的距离（px） */
+    var BOTTOM_INSET = 4;/* 底端落点：副标题左缘向右的偏移（穿过行首字符） */
+
+    /* 收集“标题 + 副标题”配对：.prose 内 h2 紧邻 .sec-sub */
+    var pairs = [];
+    document.querySelectorAll(".prose h2").forEach(function (h) {
+      var sub = h.nextElementSibling;
+      if (sub && sub.classList.contains("sec-sub")) pairs.push({ h: h, sub: sub });
+    });
+    if (!pairs.length) return;
+
+    function measure() {
+      pairs.forEach(function (pair) {
+        var h = pair.h, sub = pair.sub;
+        /* h2 与副标题为同级兄弟，offsetTop 参照同一定位祖先，差值即块高。
+           斜杆底端锚定在 h2 盒左缘（即 .prose 内容左缘）+ BOTTOM_INSET，
+           不随副标题自身的左缩进移动 */
+        var span = sub.offsetTop + sub.offsetHeight - h.offsetTop;
+        var total = span + TOP_OUT + BOTTOM_OUT;
+        var height = total / ANGLE_COS;
+        /* 斜杆 rotate(14deg) 后底端相对顶端左移 total·tan(14°)；
+           以底端锚点反推顶端横坐标，
+           内容页桌面端该值恰好等于编号 + gap 后的标题正文起点 */
+        var left = BOTTOM_INSET + total * ANGLE_TAN;
+        h.style.setProperty("--slash-l", left.toFixed(1) + "px");
+        h.style.setProperty("--slash-t", (-TOP_OUT) + "px");
+        h.style.setProperty("--slash-h", height.toFixed(1) + "px");
+      });
+    }
+
+    var scheduled = false;
+    function schedule() {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function () {
+        scheduled = false;
+        measure();
+      });
+    }
+
+    /* defer 脚本执行时样式表已加载，直接首测；
+       load / fonts.ready 再覆盖字体换排后的尺寸 */
+    measure();
+    window.addEventListener("load", measure);
+    window.addEventListener("resize", schedule, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  })();
+
+  /* ---- 6. 页脚年份 ----
      把 HTML 里 <span data-year> 的占位年份替换为当前年份 */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());
