@@ -1,6 +1,6 @@
 /* ============================================================
    A-BITE 首页交互脚本
-   共 6 个功能：
+   共 7 个功能：
    1. 导航栏滚动状态（滚动后显示发丝底边线）
    2. 移动端菜单开合
    3. 轻量滚动浮现动画（IntersectionObserver 驱动 .reveal）
@@ -8,6 +8,7 @@
       （内含原"滚动时产品图从文字后方脱出"的滚动补偿；仅首页 .hero 启用）
    5. 章节标题装饰斜杠：按实际排版测量几何并写入 --slash-* CSS 变量
    6. 页脚年份自动更新
+   7. 首页开场加载动画（仅 #pageLoader 存在时启用，混合时序控制）
    ============================================================ */
 
 /* 立即执行函数 + "use strict"：
@@ -600,4 +601,77 @@
      把 HTML 里 <span data-year> 的占位年份替换为当前年份 */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());
+
+  /* ---- 7. 首页开场加载动画（混合时序）----
+     仅首页 HTML 含有 #pageLoader，其余页面本模块直接跳过。
+     时序采用"延迟出现 + 最短展示 + 真实 load 驱动"的混合策略：
+       a. 遮罩默认隐藏；脚本启动后先等 SHOW_DELAY（250ms），
+          若窗口 load 在阈值内已触发，说明加载极快，遮罩永不出现，
+          避免一闪而过的廉价感；
+       b. 超过阈值才浮现并锁定背景滚动；
+       c. load 触发后不立即退场，而是补够 MIN_DISPLAY（自导航开始
+          计 900ms），保证方块追逐动画至少完整呈现半轮以上；
+       d. 退场走 CSS 0.45s 淡出，结束后移除节点并释放滚动；
+       e. HARD_CAP 10s 兜底：个别资源挂起导致 load 不触发时，
+          遮罩也不会永久卡住；
+       f. prefers-reduced-motion：直接移除遮罩，不展示动画。 */
+  (function initPageLoader() {
+    var loader = document.getElementById("pageLoader");
+    if (!loader) return;
+
+    var reduceMotion7 = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion7) {
+      if (loader.parentNode) loader.parentNode.removeChild(loader);
+      return;
+    }
+
+    var SHOW_DELAY = 250;    /* 延迟出现阈值（ms）：阈值内加载完则不显示 */
+    var MIN_DISPLAY = 900;   /* 自导航开始计的最短展示（ms） */
+    var EXIT_MS = 450;       /* 与 loader.css 淡出过渡时长保持一致 */
+    var HARD_CAP = 10000;    /* 资源异常时的强制退场兜底（ms） */
+
+    var shown = false;       /* 遮罩是否已浮现 */
+    var done = false;        /* load（或兜底）是否已触发 */
+    var showTimer = setTimeout(show, SHOW_DELAY);
+    var hardTimer = setTimeout(finish, HARD_CAP);
+
+    /* defer 脚本正常早于 load 执行；readyState 兜底极端缓存回放场景 */
+    if (document.readyState === "complete") {
+      finish();
+    } else {
+      window.addEventListener("load", finish);
+    }
+
+    function show() {
+      if (shown || done) return;
+      shown = true;
+      document.documentElement.classList.add("is-loader-on");  /* 锁滚动 */
+      loader.classList.add("is-visible");
+    }
+
+    function finish() {
+      if (done) return;
+      done = true;
+      clearTimeout(showTimer);
+      clearTimeout(hardTimer);
+
+      /* 阈值内即加载完成：遮罩从未显示，直接清理，不引起任何视觉变化 */
+      if (!shown) {
+        removeLoader();
+        return;
+      }
+
+      /* performance.now() 以导航开始为零点；补足最短展示后再淡出 */
+      var wait = Math.max(0, MIN_DISPLAY - performance.now());
+      setTimeout(function () {
+        loader.classList.remove("is-visible");
+        setTimeout(removeLoader, EXIT_MS);
+      }, wait);
+    }
+
+    function removeLoader() {
+      document.documentElement.classList.remove("is-loader-on");
+      if (loader.parentNode) loader.parentNode.removeChild(loader);
+    }
+  })();
 })();

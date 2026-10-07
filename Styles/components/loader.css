@@ -1,0 +1,68 @@
+/* ============================================================
+   A-BITE 首页开场加载动画（仅 index.html 引用）
+   视觉：一个 25px 方块沿对角线往返，两条同尺寸的 box-shadow
+         拖影像"追尾"般跟随，1.5s 循环。
+   配色（三色均取自设计令牌 variables.css）：
+     主方块  --teal-600  #41a68d  品牌青绿
+     拖影一  --sage-600  #86a49d  灰绿
+     拖影二  --ink-900   #1f3531  近黑墨色
+   时序由 js/main.js 第 7 节统一控制：
+     默认隐藏 → 250ms 内未加载完才浮现（防闪现）→
+     最短展示约 0.9s → 0.45s 淡出后移除节点。
+   ============================================================ */
+
+/* ---- 全屏遮罩：盖在所有层之上（翻页圆点 101 / 导航 100） ---- */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  /* 淡出：透明度 0.45s，visibility 延后同样时长再隐藏 */
+  transition: opacity 0.45s var(--ease-out),
+              visibility 0s linear 0.45s;
+}
+
+/* JS 在 250ms 阈值后添加：淡入稍快（0.25s），出现干脆 */
+.page-loader.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s var(--ease-out);
+}
+
+/* 遮罩展示期间锁定背景滚动（类挂在 <html> 上，淡出后移除） */
+html.is-loader-on {
+  overflow: hidden;
+}
+
+/* ---- 方块动画本体 ---- */
+.loader {
+  width: 25px;
+  aspect-ratio: 1;
+  background: var(--teal-600);
+  animation: loader-chase 1.5s infinite;
+}
+
+@keyframes loader-chase {
+  0%,
+  100% {
+    transform: translate(-30px, -30px);
+    box-shadow: 0 0 var(--sage-600), 0 0 var(--ink-900);
+  }
+  40% {
+    transform: translate(30px, 30px);
+    box-shadow: -10px -10px var(--sage-600), -20px -20px var(--ink-900);
+  }
+  50% {
+    transform: translate(30px, 30px);
+    box-shadow: 0 0 var(--sage-600), 0 0 var(--ink-900);
+  }
+  90% {
+    transform: translate(-30px, -30px);
+    box-shadow: 10px 10px var(--sage-600), 20px 20px var(--ink-900);
+  }
+}

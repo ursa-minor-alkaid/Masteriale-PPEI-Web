@@ -23,6 +23,7 @@
        层层覆盖，后面的文件可引用前面定义的 CSS 变量 -->
   <link rel="stylesheet" href="Styles/base/variables.css">   <!-- 全站 CSS 变量（颜色/字体/圆角/阴影等） -->
   <link rel="stylesheet" href="Styles/base/reset.css">       <!-- 浏览器默认样式重置 + 全局排版 + .reveal 浮现动画 -->
+  <link rel="stylesheet" href="Styles/components/loader.css"><!-- 仅首页：开场加载遮罩与方块动画（main.js 第 7 节控制时序） -->
   <link rel="stylesheet" href="Styles/components/buttons.css"><!-- 按钮与带箭头文字链接 -->
   <link rel="stylesheet" href="Styles/components/navbar.css">  <!-- 固定顶栏导航 -->
   <link rel="stylesheet" href="Styles/components/navbar-dropdown.css">  <!-- 顶栏下拉子菜单（附加样式） -->
@@ -34,6 +35,12 @@
   <link rel="stylesheet" href="Styles/pages/home-pager.css">   <!-- 首页整页翻页：满视口分页容器与过渡动画（仅新增 .fp-* 规则，不覆盖既有样式） -->
 </head>
 <body>
+
+  <!-- 首页开场加载动画（仅首页存在此节点；默认隐藏，main.js 第 7 节按混合时序控制）
+       role="status" + aria-label：屏幕阅读器播报"正在加载" -->
+  <div id="pageLoader" class="page-loader" role="status" aria-label="Loading">
+    <div class="loader" aria-hidden="true"></div>
+  </div>
 
   <!-- 毛玻璃背景与顶部导航栏由 components.js 统一注入（全站一份源码，
        改 js/components.js 即可全站生效），不再内联编写 -->
